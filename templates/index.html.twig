@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} BayFleet Forge {% endblock %}
+
+{% block body %}
+<style>
+
+</style>
+
+<div>
+    <div class="m-auto d-flex justify-content-between mt-5 main-container">
+        <a class="col-4 btn-squad text-decoration-none">
+            <div class="header-card holo">
+                <span class="corner-border-top"></span>
+                <div>
+                    <h1 class="headline1"> SQUAD BUILDER </h1>
+                </div>
+                <span class="corner-border-bottom"></span>
+            </div>
+        </a>
+        <a href="{{ path('app_database') }}" class="col-4 btn-squad text-decoration-none">
+            <div class="header-card holo">
+                <span class="corner-border-top"></span>
+                <div>
+                    <h1 class="headline1"> DATABASE </h1>
+                </div>
+                <span class="corner-border-bottom"></span>
+            </div>
+        </a>
+    </div>
+</div>
+
+
+{% endblock %}
+

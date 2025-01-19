@@ -1,0 +1,17 @@
+[
+  {
+    "name": "Rebel Alliance",
+    "xws": "rebelalliance",
+    "icon": "https://infinitearenas.com/xw2/images/artwork/faction-icons/Rebel.png"
+  },
+  {
+    "name": "Galactic Empire",
+    "xws": "galacticempire",
+    "icon": "https://infinitearenas.com/xw2/images/artwork/faction-icons/Imperial.png"
+  },
+  {
+    "name": "Scum and Villainy",
+    "xws": "scumandvillainy",
+    "icon": "https://infinitearenas.com/xw2/images/artwork/faction-icons/Scum.png"
+  }
+]

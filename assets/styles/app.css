@@ -1,3 +1,110 @@
+*,
+::before,
+::after {
+    box-sizing: border-box;
+}
+
 body {
-    background-color: skyblue;
+    background-image: radial-gradient(rgba(50, 50, 50, 0.5) 1px, transparent 1px);
+    background-size: 10px 10px;
+    background-color: #141516 !important;
+    color: white;
+}
+
+.header-card {
+    align-items: center;
+    border: 0 solid rgba(245, 176, 66, 0.75);
+    border-width: 1px 0;
+    display: flex;
+    height: 100%;
+    justify-content: center;
+    padding: .5rem;
+    position: relative;
+}
+
+.corner-border-top::before,
+.corner-border-top::after,
+.corner-border-bottom::before,
+.corner-border-bottom::after {
+    content: "";
+    position: absolute;
+    border: 0px solid #aafffc;
+    height: 5px;
+    width: 5px;
+}
+
+.corner-border-top::before {
+    border-left-width: 1px;
+    border-top-width: 1px;
+    left: 0;
+    top: -1px;
+}
+.corner-border-top::after {
+    border-right-width: 1px;
+    border-top-width: 1px;
+    right: 0;
+    top: -1px;
+}
+
+.corner-border-bottom::before {
+    border-bottom-width: 1px;
+    border-left-width: 1px;
+    bottom: -1px;
+    left: 0;
+}
+.corner-border-bottom::after {
+    border-bottom-width: 1px;
+    border-right-width: 1px;
+    bottom: -1px;
+    right: 0;
+}
+
+.holo {
+    background: linear-gradient(0deg,
+            rgba(80, 118, 175, 0.15) 0%,
+            rgba(17, 17, 17, 0) 100%);
+    transition: all .4s ease-in-out;
+}
+.holo:hover {
+    background-position: 0 100%;
+}
+
+@keyframes entrance {
+	to,
+	20%,
+	40%,
+	60%,
+	80% {
+		opacity: 1;
+	}
+	from,
+	10%,
+	30%,
+	50%,
+	70%,
+	90% {
+		opacity: 0;
+	}
+}
+
+.card {
+    width: 100%;
+    display: grid;
+    border: 0 #f5d546 solid;
+    animation: entrance 400ms 800ms linear backwards 1;
+}
+
+.card #component {
+    margin: 1rem;
+}
+
+.btn-squad {
+    cursor: pointer;
+    height: 75vh;
+    animation: entrance 400ms 800ms linear backwards 1;
+    transition: all 0.3s;
+}
+
+.main-container {
+    width: 65%;
 }
