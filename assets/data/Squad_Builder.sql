@@ -81,6 +81,8 @@ CREATE TABLE `pilot` (
   `id_ship` int
 );
 
+-- Fin des entity créées
+
 CREATE TABLE `charge` (
   `id_charge` int PRIMARY KEY,
   `value` int,
