@@ -22,14 +22,11 @@ class ImportController extends AbstractController
      */
     public function importFactions(): JsonResponse
     {
-        // Dossier des factions
         $directory = $this->getParameter('kernel.project_dir') . '/assets/data/factions';
 
-        // Finder pour récupérer le fichier JSON de factions
         $finder = new Finder();
         $finder->files()->name('faction.json')->in($directory);
 
-        // On vérifie qu'il y a un fichier et on le récupère
         $files = iterator_to_array($finder);
         if (empty($files)) {
             return new JsonResponse([
@@ -39,7 +36,7 @@ class ImportController extends AbstractController
             ]);
         }
 
-        // On prend le premier fichier trouvé
+        // first file found
         $file = reset($files);
 
         $jsonContent = file_get_contents($file->getRealPath());
@@ -66,37 +63,35 @@ class ImportController extends AbstractController
      */
     public function importPilots(): JsonResponse
     {
-        // Dossier des pilotes, dans les sous-dossiers de factions
         $directory = $this->getParameter('kernel.project_dir') . '/assets/data/pilots';
+        $factionDir = ['galactic-empire', 'rebel-alliance', 'scum-and-villainy'];
 
-        // Finder pour récupérer les fichiers JSON des vaisseaux (pilotes)
         $finder = new Finder();
         $finder->files()->name('*.json')->in($directory);
 
-        $successCount = 0;
-        $failureCount = 0;
+        foreach ($factionDir as $faction) {
+            $factionPath = $directory . '/' . $faction;
+            
+            if (is_dir($factionPath)) {
+                
+                $finder->files()->in($factionPath)->name('*.json');
+                
+                foreach ($finder as $file) {
+                    
+                    $jsonContent = file_get_contents($file->getRealPath());
+                    $data = json_decode($jsonContent, true);
 
-        // Parcours les fichiers de vaisseaux (pilotes)
-        foreach ($finder as $file) {
-            $jsonContent = file_get_contents($file->getRealPath());
-            $data = json_decode($jsonContent, true);
-
-            if ($data) {
-                $result = $this->importService->importShipsAndPilots($data);
-                if ($result === "Données importées avec succès!") {
-                    $successCount++;
-                } else {
-                    $failureCount++;
+                    if ($data) {
+                        $this->importService->importShipsAndPilots($data);
+                    } else {
+                        return new JsonResponse(['error' => 'Erreur de décodage JSON dans ' . $file->getFilename()]);
+                    }
                 }
             } else {
-                $failureCount++;
+                return new JsonResponse(['error' => 'Le dossier de faction ' . $faction . ' est introuvable.']);
             }
         }
 
-        return new JsonResponse([
-            'message' => 'Import des pilotes (vaisseaux) terminé',
-            'success' => $successCount,
-            'failure' => $failureCount
-        ]);
+        return new JsonResponse(['message' => 'Importation des pilotes terminée avec succès']);
     }
 }
