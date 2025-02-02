@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Entity;
 
 use App\Repository\PilotRepository;
@@ -38,6 +37,9 @@ class Pilot
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $ability = null;
 
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $text = null;
+
     #[ORM\Column(length: 255)]
     private ?string $image = null;
 
@@ -53,8 +55,10 @@ class Pilot
     #[ORM\Column(length: 255)]
     private ?string $slots = null;
 
-    #[ORM\Column]
-    private ?int $id_ship = null;
+    // ManyToOne with Ship
+    #[ORM\ManyToOne(targetEntity: Ship::class)]
+    #[ORM\JoinColumn(name: "id_ship", referencedColumnName: "id")]
+    private ?Ship $ship = null;
 
     public function getId(): ?int
     {
@@ -157,6 +161,18 @@ class Pilot
         return $this;
     }
 
+    public function getText(): ?string
+    {
+        return $this->text;
+    }
+
+    public function setText(?string $text): static
+    {
+        $this->text = $text;
+
+        return $this;
+    }
+
     public function getImage(): ?string
     {
         return $this->image;
@@ -217,14 +233,15 @@ class Pilot
         return $this;
     }
 
-    public function getIdShip(): ?int
+    // ManyToOne to get ship
+    public function getShip(): ?Ship
     {
-        return $this->id_ship;
+        return $this->ship;
     }
 
-    public function setIdShip(int $id_ship): static
+    public function setShip(?Ship $ship): static
     {
-        $this->id_ship = $id_ship;
+        $this->ship = $ship;
 
         return $this;
     }

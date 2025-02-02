@@ -25,8 +25,10 @@ class Stat
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $recovers = null;
 
-    #[ORM\Column]
-    private ?int $id_ship = null;
+    // Colonne de clé étrangère explicitement définie
+    #[ORM\ManyToOne(targetEntity: Ship::class)]
+    #[ORM\JoinColumn(name: "id_ship", referencedColumnName: "id", nullable: false)]
+    private ?Ship $ship = null;
 
     public function getId(): ?int
     {
@@ -81,14 +83,15 @@ class Stat
         return $this;
     }
 
-    public function getIdShip(): ?int
+    // Getter et Setter pour la relation ManyToOne vers Ship
+    public function getShip(): ?Ship
     {
-        return $this->id_ship;
+        return $this->ship;
     }
 
-    public function setIdShip(int $id_ship): static
+    public function setShip(?Ship $ship): static
     {
-        $this->id_ship = $id_ship;
+        $this->ship = $ship;
 
         return $this;
     }

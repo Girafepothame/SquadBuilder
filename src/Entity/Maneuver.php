@@ -16,8 +16,9 @@ class Maneuver
     #[ORM\Column(length: 255)]
     private ?string $code = null;
 
-    #[ORM\Column]
-    private ?int $id_dial = null;
+    #[ORM\ManyToOne(targetEntity: Dial::class)]
+    #[ORM\JoinColumn(name: 'id_dial', referencedColumnName: 'id')]
+    private ?Dial $dial = null;
 
     public function getId(): ?int
     {
@@ -36,15 +37,16 @@ class Maneuver
         return $this;
     }
 
-    public function getIdDial(): ?int
+    public function getDial(): ?Dial
     {
-        return $this->id_dial;
+        return $this->dial;
     }
 
-    public function setIdDial(int $id_dial): static
+    public function setDial(Dial $dial): static
     {
-        $this->id_dial = $id_dial;
+        $this->dial = $dial;
 
         return $this;
     }
 }
+

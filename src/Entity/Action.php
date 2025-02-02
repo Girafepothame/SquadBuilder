@@ -19,11 +19,14 @@ class Action
     #[ORM\Column(length: 255)]
     private ?string $type = null;
 
-    #[ORM\Column]
-    private ?int $id_ship = null;
+    #[ORM\ManyToOne(targetEntity: Ship::class)]
+    #[ORM\JoinColumn(name: "id_ship", referencedColumnName: "id", nullable: false)]
+    private ?Ship $ship = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?int $id_linked = null;
+    // auto-ref relation : Action linked to another Action
+    #[ORM\ManyToOne(targetEntity: Action::class)]
+    #[ORM\JoinColumn(name: "id_linked", referencedColumnName: "id", nullable: true)]
+    private ?Action $linkedAction = null;
 
     public function getId(): ?int
     {
@@ -54,26 +57,27 @@ class Action
         return $this;
     }
 
-    public function getIdShip(): ?int
+    public function getShip(): ?Ship
     {
-        return $this->id_ship;
+        return $this->ship;
     }
 
-    public function setIdShip(int $id_ship): static
+    public function setShip(Ship $ship): static
     {
-        $this->id_ship = $id_ship;
+        $this->ship = $ship;
 
         return $this;
     }
 
-    public function getIdLinked(): ?int
+    // Getter and Setter for Linked Action
+    public function getLinkedAction(): ?Action
     {
-        return $this->id_linked;
+        return $this->linkedAction;
     }
 
-    public function setIdLinked(?int $id_linked): static
+    public function setLinkedAction(?Action $linkedAction): static
     {
-        $this->id_linked = $id_linked;
+        $this->linkedAction = $linkedAction;
 
         return $this;
     }

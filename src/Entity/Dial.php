@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Entity;
 
 use App\Repository\DialRepository;
@@ -16,8 +15,10 @@ class Dial
     #[ORM\Column(length: 255)]
     private ?string $dialCodes = null;
 
-    #[ORM\Column]
-    private ?int $id_ship = null;
+    // Utilisation de ManyToOne pour la relation avec Ship
+    #[ORM\ManyToOne(targetEntity: Ship::class)]
+    #[ORM\JoinColumn(name: "id_ship", referencedColumnName: "id")]
+    private ?Ship $ship = null; // Référence à l'entité Ship
 
     public function getId(): ?int
     {
@@ -36,14 +37,15 @@ class Dial
         return $this;
     }
 
-    public function getIdShip(): ?int
+    // Méthodes pour accéder à la relation ManyToOne avec Ship
+    public function getShip(): ?Ship
     {
-        return $this->id_ship;
+        return $this->ship;
     }
 
-    public function setIdShip(int $id_ship): static
+    public function setShip(?Ship $ship): static
     {
-        $this->id_ship = $id_ship;
+        $this->ship = $ship;
 
         return $this;
     }

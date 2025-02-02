@@ -25,8 +25,10 @@ class Ship
     #[ORM\Column(length: 255)]
     private ?string $icon = null;
 
-    #[ORM\Column]
-    private ?int $id_faction = null;
+    // Relation ManyToOne avec Faction
+    #[ORM\ManyToOne(targetEntity: Faction::class)]
+    #[ORM\JoinColumn(name: "id_faction", referencedColumnName: "id")]
+    private ?Faction $faction = null;
 
     public function getId(): ?int
     {
@@ -41,7 +43,6 @@ class Ship
     public function setName(string $name): static
     {
         $this->name = $name;
-
         return $this;
     }
 
@@ -53,7 +54,6 @@ class Ship
     public function setXws(string $xws): static
     {
         $this->xws = $xws;
-
         return $this;
     }
 
@@ -65,7 +65,6 @@ class Ship
     public function setSize(string $size): static
     {
         $this->size = $size;
-
         return $this;
     }
 
@@ -77,19 +76,19 @@ class Ship
     public function setIcon(string $icon): static
     {
         $this->icon = $icon;
-
         return $this;
     }
 
-    public function getIdFaction(): ?int
+    // Getters & setters for ManyToOne
+    public function getFaction(): ?Faction
     {
-        return $this->id_faction;
+        return $this->faction;
     }
 
-    public function setIdFaction(int $id_faction): static
+    public function setFaction(?Faction $faction): static
     {
-        $this->id_faction = $id_faction;
-
+        $this->faction = $faction;
         return $this;
     }
 }
+
