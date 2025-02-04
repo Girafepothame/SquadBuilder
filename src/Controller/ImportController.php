@@ -17,15 +17,13 @@ class ImportController extends AbstractController
         $this->importService = $importService;
     }
 
-    /**
-     * @Route("/import-factions", name="app_import_factions", methods={"GET"})
-     */
+    #[Route("/import-factions", name: "app_import_factions", methods: ["GET"])]
     public function importFactions(): JsonResponse
     {
         $directory = $this->getParameter('kernel.project_dir') . '/assets/data/factions';
 
         $finder = new Finder();
-        $finder->files()->name('faction.json')->in($directory);
+        $finder->files()->name('factions.json')->in($directory);
 
         $files = iterator_to_array($finder);
         if (empty($files)) {
@@ -58,9 +56,7 @@ class ImportController extends AbstractController
         }
     }
 
-    /**
-     * @Route("/import-pilots", name="app_import_pilots", methods={"GET"})
-     */
+    #[Route("/import-pilots", name: "app_import_pilots", methods: ["GET"])]
     public function importPilots(): JsonResponse
     {
         $directory = $this->getParameter('kernel.project_dir') . '/assets/data/pilots';
@@ -71,13 +67,12 @@ class ImportController extends AbstractController
 
         foreach ($factionDir as $faction) {
             $factionPath = $directory . '/' . $faction;
-            
+
             if (is_dir($factionPath)) {
-                
+
                 $finder->files()->in($factionPath)->name('*.json');
-                
                 foreach ($finder as $file) {
-                    
+
                     $jsonContent = file_get_contents($file->getRealPath());
                     $data = json_decode($jsonContent, true);
 

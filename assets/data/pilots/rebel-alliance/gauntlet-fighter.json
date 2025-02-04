@@ -2,6 +2,7 @@
   "name": "Gauntlet Fighter",
   "xws": "gauntletfighter",
   "size": "Large",
+  "icon": "https://infinitearenas.com/xw2/images/shipicons/rebel-alliance/I_GauntletFighter.png",
   "dial": [
     "0OR",
     "1BB",
