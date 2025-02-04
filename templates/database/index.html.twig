@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello DatabaseController!{% endblock %}
+{% block title %}DataBase{% endblock %}
 
 {% block body %}
 <style>
@@ -16,5 +16,45 @@
         <li>Your controller at <code>C:/wamp64/www/SquadBuilder/src/Controller/DatabaseController.php</code></li>
         <li>Your template at <code>C:/wamp64/www/SquadBuilder/templates/database/index.html.twig</code></li>
     </ul>
+
+    <button class="btn btn-primary" id="importDataBtn" type="button">Importer Factions et Pilotes</button>
+    <div id="responseMessage"></div>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+<script>
+
+    console.log(document.getElementById('importDataBtn'))
+
+    document.getElementById('importDataBtn').addEventListener('click', function() {
+        
+        console.log("importation factions...")
+
+        axios.get("{{ path('app_import_factions') }}")
+            .then(response => {
+                console.log('Factions importées :', response.data);
+                
+                document.getElementById('responseMessage').innerHTML = 'Factions: ' + response.data;
+            })
+            .catch(error => {
+                console.error('Erreur import factions:', error);
+                document.getElementById('responseMessage').innerHTML = 'Erreur lors de l\'importation des factions.';
+            })
+            .finally(() => {
+                
+                console.log("importation pilots...")
+                axios.get("{{ path('app_import_pilots') }}")
+                    .then(response => {
+                        console.log('Pilotes importés :', response.data.message);
+                        document.getElementById('responseMessage').innerHTML += '<br>Pilotes: ' + response.data.message;
+                    })
+                    .catch(error => {
+                        console.error('Erreur import pilotes:', error);
+                        document.getElementById('responseMessage').innerHTML += '<br>Erreur lors de l\'importation des pilotes.';
+                    });
+            });
+    });
+
+</script>
 {% endblock %}

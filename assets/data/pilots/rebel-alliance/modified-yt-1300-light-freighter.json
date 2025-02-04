@@ -161,55 +161,6 @@
       "image": "https://infinitearenas.com/xw2/images/pilots/leiaorgana.png",
       "keywords": ["Freighter", "YT-1300", "Light Side"],
       "epic": true
-    },
-    {
-      "name": "Han Solo",
-      "caption": "Battle of Yavin",
-      "initiative": 6,
-      "limited": 1,
-      "cost": 7,
-      "xws": "hansolo-battleofyavin",
-      "ability": "After performing an attack that hits, you may spend 1 [Charge] to perform a [Coordinate] action.",
-      "shipAbility": {
-        "name": "Solo",
-        "text": "While you defend or perform an attack, if there are no other friendly ships at range 0-1, you may spend 1 [Charge] to reroll one of your dice."
-      },
-      "standardLoadout": ["chewbacca-battleofyavin", "riggedcargochute", "millenniumfalcon", "l337sprogramming-battleofyavin"],
-      "image": "https://infinitearenas.com/xw2/images/quickbuilds/hansolo-battleofyavin.png",
-      "artwork": "https://infinitearenas.com/xw2/images/artwork/pilots/hansolo-battleofyavin.png",
-      "standard": true,
-      "extended": true,
-      "keywords": ["Freighter", "YT-1300"],
-      "epic": true
-    },
-    {
-      "name": "Lando Calrissian",
-      "caption": "Battle Over Endor",
-      "initiative": 5,
-      "limited": 1,
-      "cost": 7,
-      "xws": "landocalrissian-battleoverendor",
-      "ability": "At the start of the Activation Phase, you may spend 1 [Charge]. If you do, choose an initiative value from 1 to 6. You activate at that initiative this phase.",
-      "shipAbility": {
-        "name": "High Stakes",
-        "text": "After you perform a red action, you may roll an attack die. On a [Hit]/[Critical Hit] result, remove 1 stress."
-      },
-      "shipActions": [
-        { "difficulty": "White", "type": "Focus" },
-        { "difficulty": "White", "type": "Lock" },
-        { "difficulty": "White", "type": "Evade" },
-        { "difficulty": "Red", "type": "Boost" },
-        { "difficulty": "White", "type": "Rotate Arc" },
-        { "difficulty": "Red", "type": "Coordinate", "linked": { "difficulty": "Red", "type": "Focus" } }
-      ],
-      "charges": { "value": 2, "recovers": 0 },
-      "standardLoadout": ["aceinthehole-battleoverendor", "itsatrap-battleoverendor", "niennunb", "airencracken-battleoverendor", "millenniumfalcon-battleoverendor"],
-      "image": "https://infinitearenas.com/xw2/images/quickbuilds/landocalrissian-battleoverendor.png",
-      "artwork": "https://infinitearenas.com/xw2/images/artwork/pilots/landocalrissian-battleoverendor.png",
-      "standard": true,
-      "extended": true,
-      "keywords": ["Freighter", "YT-1300"],
-      "epic": true
     }
   ]
 }

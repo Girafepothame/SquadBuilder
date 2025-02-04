@@ -19,7 +19,7 @@ class Pilot
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable:true)]
     private ?string $caption = null;
 
     #[ORM\Column]
@@ -94,7 +94,7 @@ class Pilot
         return $this->caption;
     }
 
-    public function setCaption(string $caption): static
+    public function setCaption(?string $caption): static
     {
         $this->caption = $caption;
 

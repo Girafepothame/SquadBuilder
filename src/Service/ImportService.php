@@ -29,45 +29,43 @@ class ImportService
 
     public function importShipsAndPilots(array $shipsData): void
     {
-        foreach ($shipsData as $shipData) {
-            $ship = new Ship();
-            $ship->setName($shipData['name']);
-            $ship->setXws($shipData['xws']);
-            $ship->setSize($shipData['size']);
-            $ship->setIcon($shipData['icon']);
+        $ship = new Ship();
+        $ship->setName($shipsData['name']);
+        $ship->setXws($shipsData['xws']);
+        $ship->setSize($shipsData['size']);
+        $ship->setIcon($shipsData['icon'] ?? "");
 
-            $faction = $this->entityManager->getRepository(Faction::class)->findOneBy(['xws' => $shipData['faction']]);
-            $ship->setFaction($faction);
+        $faction = $this->entityManager->getRepository(Faction::class)->findOneBy(['xws' => $shipsData['faction']]);
+        $ship->setFaction($faction);
 
-            $this->entityManager->persist($ship);
+        $this->entityManager->persist($ship);
 
-            // Import associated data (dials, maneuvers, stats, actions, pilots)
-            $this->importDialAndManeuvers($shipData['dialCodes'][0], $shipData['dial'], $ship);
-            $this->importStats($shipData['stats'], $ship);
-            $this->importActions($shipData['actions'], $ship);
+        // Import associated data (dials, maneuvers, stats, actions, pilots)
+        $this->importDialAndManeuvers($shipsData['dialCodes'][0], $shipsData['dial'], $ship);
+        $this->importStats($shipsData['stats'], $ship);
+        $this->importActions($shipsData['actions'], $ship);
 
-            foreach ($shipData['pilots'] as $pilotData) {
-                $pilot = new Pilot();
-                
-                $pilot->setName($pilotData['name']);
-                $pilot->setXws($pilotData['xws']);
-                $pilot->setCaption($pilotData['caption']);
-                $pilot->setInitiative($pilotData['initiative']);
-                $pilot->setLimited($pilotData['limited']);
-                $pilot->setCost($pilotData['cost']);
-                $pilot->setLoadout($pilotData['loadout']);
-                $pilot->setAbility($pilotData['ability']);
-                $pilot->setText($pilotData['text']);
-                $pilot->setImage($pilotData['image']);
-                $pilot->setArtwork($pilotData['artwork']);
-                $pilot->setShipAbility($pilotData['shipAbility']);
-                $pilot->setKeywords(implode(",", $pilotData['keywords']));
-                $pilot->setSlots(implode(",", $pilotData['slots']));
+        foreach ($shipsData['pilots'] as $pilotData) {
+            $pilot = new Pilot();
+            
+            $pilot->setName($pilotData['name']);
+            $pilot->setXws($pilotData['xws']);
+            $pilot->setCaption($pilotData['caption'] ?? null);
+            $pilot->setInitiative($pilotData['initiative']);
+            $pilot->setLimited($pilotData['limited']);
+            $pilot->setCost($pilotData['cost']);
+            $pilot->setLoadout($pilotData['loadout'] ?? 0);
+            $pilot->setAbility($pilotData['ability'] ?? null);
+            $pilot->setText($pilotData['text'] ?? null);
+            $pilot->setImage($pilotData['image'] ?? "");
+            $pilot->setArtwork($pilotData['artwork']);
+            $pilot->setShipAbility(isset($pilotData['shipAbility']) ? $pilotData['shipAbility']['name'] . ": " . $pilotData['shipAbility']['text'] : null);
+            $pilot->setKeywords(implode(",", $pilotData['keywords'] ?? []));
+            $pilot->setSlots(implode(",", $pilotData['slots'] ?? []));
 
-                $pilot->setShip($ship);
+            $pilot->setShip($ship);
 
-                $this->entityManager->persist($pilot);
-            }
+            $this->entityManager->persist($pilot);
         }
 
         $this->entityManager->flush();
@@ -95,11 +93,12 @@ class ImportService
     {
         foreach ($stats as $statData) {
             $stat = new Stat();
-            $stat->setArc($statData['arc']);
+            $stat->setArc($statData['arc'] ?? null);
             $stat->setType($statData['type']);
             $stat->setValue($statData['value']);
-            $stat->setRecovers($statData['recovers']);
+            $stat->setRecovers($statData['recovers'] ?? null);
             $stat->setShip($ship);
+
 
             $this->entityManager->persist($stat);
         }
