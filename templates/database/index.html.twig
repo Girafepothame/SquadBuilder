@@ -76,7 +76,10 @@
                                                 <div class="h-100 d-flex justify-content-between align-items-center">
                                                     <span class="ms-3 h-100 h4">{{ pilot.initiative }}</span>
                                                     <span class="ms-5 h-100 h5">
-                                                        <div>{{ pilot.name }} {% if pilot.caption != "" %} <span class="fst-italic text-secondary"> - {{ pilot.caption }} </span> {% endif %} </div>
+                                                        <div>
+                                                            {% if pilot.limited > 0 %} {% for i in 1..pilot.limited %} <span class="x-icon">u</span> {% endfor %} {% endif %}
+                                                            {{ pilot.name }} {% if pilot.caption != "" %} <span class="fst-italic text-secondary"> - {{ pilot.caption }} </span> {% endif %}
+                                                        </div>
                                                     </span>
                                                 </div>
                                                 <i class="fa-solid fa-caret-right me-3"></i>
@@ -108,13 +111,14 @@
         <div class="d-flex flex-column h-100">
             <div>
                 <div id="name">Nom</div>
-                <div id="fst-italic caption text-secondary">Caption</div>
+                <div id="caption" class="fst-italic text-secondary">Caption</div>
             </div>
-            <p>Voici le contenu principal.</p>
+            <img id="artwork" src="" alt="">
         </div>
         <span class="corner-border-bottom"></span>
     </div>
 </div>
+
 
 <script>
 
@@ -129,12 +133,9 @@
         axios.get("{{ path('app_import_factions') }}")
             .then(response => {
                 console.log('Factions importées :', response.data);
-
-                document.getElementById('responseMessage').innerHTML = 'Factions: ' + response.data;
             })
             .catch(error => {
                 console.error('Erreur import factions:', error);
-                document.getElementById('responseMessage').innerHTML = 'Erreur lors de l\'importation des factions.';
             })
             .finally(() => {
 
@@ -151,12 +152,21 @@
             });
     });
 
-    let pilotEls = document.querySelectorAll(".pilots")
+    const pilotsData = {{ pilots|json_encode|raw }}
+    console.log(pilotsData)
 
-    for (let pilotEl of pilotEls) {
-        let pilot = ships.filter
-        document.querySelector("#name").innerHTML
-    }
+    
+    document.querySelectorAll(".pilots").forEach(pilotEl => {
+        pilotEl.addEventListener("click", function () {
+            let pilotId = pilotEl.id;
+
+            // Trouver le pilote correspondant dans les données JSON
+            let selectedPilot = pilotsData.find(pilot => pilot.id == pilotId)
+            
+            document.querySelector("#artwork").src = selectedPilot["image"]
+        });
+    });
+
 
 </script>
 

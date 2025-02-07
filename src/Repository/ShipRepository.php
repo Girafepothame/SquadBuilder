@@ -16,6 +16,25 @@ class ShipRepository extends ServiceEntityRepository
         parent::__construct($registry, Ship::class);
     }
 
+    public function findAllAsArray(): array
+    {
+        return array_map(function (Ship $ship) {
+            return [
+                'id' => $ship->getId(),
+                'name' => $ship->getName(),
+                'xws' => $ship->getXws(),
+                'size' => $ship->getSize(),
+                'icon' => $ship->getIcon(),
+                'dialCode' => $ship->getDialCode(),
+                'faction' => $ship->getFaction() ? [
+                    'id' => $ship->getFaction()->getId(),
+                    'name' => $ship->getFaction()->getName(),
+                ] : null,
+            ];
+        }, $this->findAll());
+    }
+
+
     //    /**
     //     * @return Ship[] Returns an array of Ship objects
     //     */

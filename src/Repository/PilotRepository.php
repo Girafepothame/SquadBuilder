@@ -16,6 +16,34 @@ class PilotRepository extends ServiceEntityRepository
         parent::__construct($registry, Pilot::class);
     }
 
+    public function findAllAsArray(): array
+    {
+        return array_map(function (Pilot $pilot) {
+            return [
+                'id' => $pilot->getId(),
+                'xws' => $pilot->getXws(),
+                'name' => $pilot->getName(),
+                'caption' => $pilot->getCaption(),
+                'initiative' => $pilot->getInitiative(),
+                'limited' => $pilot->getLimited(),
+                'cost' => $pilot->getCost(),
+                'loadout' => $pilot->getLoadout(),
+                'ability' => $pilot->getAbility(),
+                'text' => $pilot->getText(),
+                'image' => $pilot->getImage(),
+                'artwork' => $pilot->getArtwork(),
+                'shipAbility' => $pilot->getShipAbility(),
+                'keywords' => $pilot->getKeywords(),
+                'slots' => $pilot->getSlots(),
+                'ship' => $pilot->getShip() ? [
+                    'id' => $pilot->getShip()->getId(),
+                    'name' => $pilot->getShip()->getName(),
+                ] : null,
+            ];
+        }, $this->findAll());
+    }
+
+
     //    /**
     //     * @return Pilot[] Returns an array of Pilot objects
     //     */

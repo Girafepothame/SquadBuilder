@@ -16,6 +16,19 @@ class FactionRepository extends ServiceEntityRepository
         parent::__construct($registry, Faction::class);
     }
 
+    public function findAllAsArray(): array
+    {
+        return array_map(function (Faction $faction) {
+            return [
+                'id' => $faction->getId(),
+                'name' => $faction->getName(),
+                'xws' => $faction->getXws(),
+                'icon' => $faction->getIcon(),
+            ];
+        }, $this->findAll());
+    }
+
+
     //    /**
     //     * @return Faction[] Returns an array of Faction objects
     //     */

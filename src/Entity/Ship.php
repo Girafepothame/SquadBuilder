@@ -24,6 +24,9 @@ class Ship
 
     #[ORM\Column(length: 255)]
     private ?string $icon = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $maneuvers = null;
     
     #[ORM\Column(length: 255)]
     private ?string $dialCode = null;
@@ -79,6 +82,17 @@ class Ship
     public function setIcon(string $icon): static
     {
         $this->icon = $icon;
+        return $this;
+    }
+
+    public function getManeuvers(): ?string
+    {
+        return $this->maneuvers;
+    }
+
+    public function setManeuvers(string $maneuvers): static
+    {
+        $this->maneuvers = $maneuvers;
         return $this;
     }
 

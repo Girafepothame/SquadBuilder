@@ -11,6 +11,8 @@ use App\Repository\FactionRepository;
 use App\Repository\ShipRepository;
 use App\Repository\PilotRepository;
 
+use App\Entity\Pilot;
+
 class Controller extends AbstractController
 {
     private $factionRepository;
@@ -43,36 +45,40 @@ class Controller extends AbstractController
             $ships = $this->shipRepository->findAll();
             $pilots = $this->pilotRepository->findAll();
 
+            $factionsArray = $this->factionRepository->findAllAsArray();
+            $shipsArray = $this->shipRepository->findAllAsArray();
+            $pilotsArray = $this->pilotRepository->findAllAsArray();
+
             // var_dump($factions, $ships, $pilots);
             // die();
-            usort($pilots, function ($a, $b) {
-                return $b->getInitiative() <=> $a->getInitiative();
-            });
 
             // Stocker les données dans la session
-            $session->set('factions', $factions);
-            $session->set('ships', $ships);
-            $session->set('pilots', $pilots);
+            $session->set('factions', $factionsArray);
+            $session->set('ships', $shipsArray);
+            $session->set('pilots', $pilotsArray);
 
         } else {
             // Récupérer les données depuis la session
-            $factions = $session->get('factions');
-            $ships = $session->get('ships');
-            $pilots = $session->get('pilots');
+            $factionsArray = $session->get('factions');
+            $shipsArray = $session->get('ships');
+            $pilotsArray = $session->get('pilots');
             
-            usort($pilots, function ($a, $b) {
-                return $b->getInitiative() <=> $a->getInitiative();
-            });
             
             // var_dump($factions, $ships, $pilots);
             // die();
         }
+        
+        usort($pilotsArray, function ($a, $b) {
+            return $b['initiative'] <=> $a['initiative'];
+        });
+
+
 
         // Passer les données à Twig
         return $this->render('database/index.html.twig', [
-            'factions' => $factions,
-            'ships' => $ships,
-            'pilots' => $pilots
+            'factions' => $factionsArray,
+            'ships' => $shipsArray,
+            'pilots' => $pilotsArray
         ]);
     }
 }

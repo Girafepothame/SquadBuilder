@@ -54,6 +54,7 @@ class ImportService
             $ship->setXws($shipsData['xws']);
             $ship->setSize($shipsData['size']);
             $ship->setIcon($shipsData['icon'] ?? "");
+            $ship->setManeuvers(implode(",", $shipsData['dial'] ?? []));
             $ship->setDialCode($shipsData['dialCodes'][0]);
             $ship->setFaction($faction);
 
@@ -62,7 +63,6 @@ class ImportService
         }
 
         // Import des données associées
-        $this->importManeuvers($shipsData['dial'], $ship);
         $this->importStats($shipsData['stats'], $ship);
         $this->importActions($shipsData['actions'], $ship);
 
@@ -97,19 +97,6 @@ class ImportService
         }
 
         $this->entityManager->flush(); // Flush final après avoir tout persisté
-    }
-
-
-
-    public function importManeuvers(array $maneuvers, Ship $ship): void
-    {
-        foreach ($maneuvers as $maneuverCode) {
-            $maneuver = new Maneuver();
-            $maneuver->setCode($maneuverCode);
-            $maneuver->setShip($ship);
-
-            $this->entityManager->persist($maneuver);
-        }
     }
 
     public function importStats(array $stats, Ship $ship): void
