@@ -24,6 +24,9 @@ class Ship
 
     #[ORM\Column(length: 255)]
     private ?string $icon = null;
+    
+    #[ORM\Column(length: 255)]
+    private ?string $dialCode = null;
 
     // Relation ManyToOne avec Faction
     #[ORM\ManyToOne(targetEntity: Faction::class)]
@@ -76,6 +79,17 @@ class Ship
     public function setIcon(string $icon): static
     {
         $this->icon = $icon;
+        return $this;
+    }
+
+    public function getDialCode(): ?string
+    {
+        return $this->dialCode;
+    }
+
+    public function setDialCode(string $dialCode): static
+    {
+        $this->dialCode = $dialCode;
         return $this;
     }
 

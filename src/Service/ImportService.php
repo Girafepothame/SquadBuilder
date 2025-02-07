@@ -16,74 +16,97 @@ class ImportService
 
     public function importFactions(array $factionsData)
     {
-        foreach($factionsData as $factionData) {
-            $faction = new Faction();
-            $faction->setName($factionData['name']);
-            $faction->setXws($factionData['xws']);
-            $faction->setIcon($factionData['icon']);
 
-            $this->entityManager->persist($faction);
+        foreach($factionsData as $factionData) {
+            $faction = $this->entityManager->getRepository(Faction::class)->findOneBy(['xws' => $factionData['xws']]);
+
+            if(!$faction) {
+                $faction = new Faction();
+                $faction->setName($factionData['name']);
+                $faction->setXws($factionData['xws']);
+                $faction->setIcon($factionData['icon']);
+    
+                $this->entityManager->persist($faction);
+            }
+
         }
         $this->entityManager->flush();
     }
 
     public function importShipsAndPilots(array $shipsData): void
     {
-        $ship = new Ship();
-        $ship->setName($shipsData['name']);
-        $ship->setXws($shipsData['xws']);
-        $ship->setSize($shipsData['size']);
-        $ship->setIcon($shipsData['icon'] ?? "");
-
         $faction = $this->entityManager->getRepository(Faction::class)->findOneBy(['xws' => $shipsData['faction']]);
-        $ship->setFaction($faction);
 
-        $this->entityManager->persist($ship);
+        if (!$faction) {
+            throw new \Exception("Faction non trouvée pour XWS : " . $shipsData['faction']);
+        }
 
-        // Import associated data (dials, maneuvers, stats, actions, pilots)
-        $this->importDialAndManeuvers($shipsData['dialCodes'][0], $shipsData['dial'], $ship);
+        // Vérifie si un vaisseau avec le même xws et la même faction existe déjà
+        $ship = $this->entityManager->getRepository(Ship::class)->findOneBy([
+            'xws' => $shipsData['xws'],
+            'faction' => $faction
+        ]);
+
+        // Si le vaisseau n'existe pas, on l'ajoute
+        if (!$ship) {
+            $ship = new Ship();
+            $ship->setName($shipsData['name']);
+            $ship->setXws($shipsData['xws']);
+            $ship->setSize($shipsData['size']);
+            $ship->setIcon($shipsData['icon'] ?? "");
+            $ship->setDialCode($shipsData['dialCodes'][0]);
+            $ship->setFaction($faction);
+
+            $this->entityManager->persist($ship);
+            $this->entityManager->flush(); // Flush ici pour obtenir l'ID avant d'ajouter ses relations
+        }
+
+        // Import des données associées
+        $this->importManeuvers($shipsData['dial'], $ship);
         $this->importStats($shipsData['stats'], $ship);
         $this->importActions($shipsData['actions'], $ship);
 
         foreach ($shipsData['pilots'] as $pilotData) {
-            $pilot = new Pilot();
-            
-            $pilot->setName($pilotData['name']);
-            $pilot->setXws($pilotData['xws']);
-            $pilot->setCaption($pilotData['caption'] ?? null);
-            $pilot->setInitiative($pilotData['initiative']);
-            $pilot->setLimited($pilotData['limited']);
-            $pilot->setCost($pilotData['cost']);
-            $pilot->setLoadout($pilotData['loadout'] ?? 0);
-            $pilot->setAbility($pilotData['ability'] ?? null);
-            $pilot->setText($pilotData['text'] ?? null);
-            $pilot->setImage($pilotData['image'] ?? "");
-            $pilot->setArtwork($pilotData['artwork']);
-            $pilot->setShipAbility(isset($pilotData['shipAbility']) ? $pilotData['shipAbility']['name'] . ": " . $pilotData['shipAbility']['text'] : null);
-            $pilot->setKeywords(implode(",", $pilotData['keywords'] ?? []));
-            $pilot->setSlots(implode(",", $pilotData['slots'] ?? []));
+            // Vérifie si le pilote existe déjà avec le même XWS et le même vaisseau
+            $pilot = $this->entityManager->getRepository(Pilot::class)->findOneBy([
+                'xws' => $pilotData['xws'],
+                'ship' => $ship
+            ]);
 
-            $pilot->setShip($ship);
+            if (!$pilot) {
+                $pilot = new Pilot();
+                $pilot->setName($pilotData['name']);
+                $pilot->setXws($pilotData['xws']);
+                $pilot->setCaption($pilotData['caption'] ?? null);
+                $pilot->setInitiative($pilotData['initiative']);
+                $pilot->setLimited($pilotData['limited']);
+                $pilot->setCost($pilotData['cost']);
+                $pilot->setLoadout($pilotData['loadout'] ?? 0);
+                $pilot->setAbility($pilotData['ability'] ?? null);
+                $pilot->setText($pilotData['text'] ?? null);
+                $pilot->setImage($pilotData['image'] ?? "");
+                $pilot->setArtwork($pilotData['artwork']);
+                $pilot->setShipAbility(isset($pilotData['shipAbility']) ? $pilotData['shipAbility']['name'] . ": " . $pilotData['shipAbility']['text'] : null);
+                $pilot->setKeywords(implode(",", $pilotData['keywords'] ?? []));
+                $pilot->setSlots(implode(",", $pilotData['slots'] ?? []));
 
-            $this->entityManager->persist($pilot);
+                $pilot->setShip($ship);
+
+                $this->entityManager->persist($pilot);
+            }
         }
 
-        $this->entityManager->flush();
+        $this->entityManager->flush(); // Flush final après avoir tout persisté
     }
 
 
-    public function importDialAndManeuvers(string $dialCode, array $maneuvers, Ship $ship): void
+
+    public function importManeuvers(array $maneuvers, Ship $ship): void
     {
-        $dial = new Dial();
-        $dial->setDialCodes($dialCode);
-        $dial->setShip($ship);
-
-        $this->entityManager->persist($dial);
-
         foreach ($maneuvers as $maneuverCode) {
             $maneuver = new Maneuver();
             $maneuver->setCode($maneuverCode);
-            $maneuver->setDial($dial);
+            $maneuver->setShip($ship);
 
             $this->entityManager->persist($maneuver);
         }

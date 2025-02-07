@@ -16,9 +16,11 @@ class Maneuver
     #[ORM\Column(length: 255)]
     private ?string $code = null;
 
-    #[ORM\ManyToOne(targetEntity: Dial::class)]
-    #[ORM\JoinColumn(name: 'id_dial', referencedColumnName: 'id')]
-    private ?Dial $dial = null;
+    // Utilisation de ManyToOne pour la relation avec Ship
+    #[ORM\ManyToOne(targetEntity: Ship::class)]
+    #[ORM\JoinColumn(name: "id_ship", referencedColumnName: "id")]
+    private ?Ship $ship = null; // Référence à l'entité Ship
+
 
     public function getId(): ?int
     {
@@ -37,14 +39,15 @@ class Maneuver
         return $this;
     }
 
-    public function getDial(): ?Dial
+    // Méthodes pour accéder à la relation ManyToOne avec Ship
+    public function getShip(): ?Ship
     {
-        return $this->dial;
+        return $this->ship;
     }
 
-    public function setDial(Dial $dial): static
+    public function setShip(?Ship $ship): static
     {
-        $this->dial = $dial;
+        $this->ship = $ship;
 
         return $this;
     }

@@ -1,11 +1,52 @@
+
+@font-face {
+    font-family: 'XWingMiniatures';
+    src: url('/assets/fonts/xwing-miniatures.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Oxanium';
+    src: url('/assets/fonts/Oxanium-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+:root {
+    --main: rgba(245, 176, 66, 0.75);
+    --primary: rgba(21, 52, 79, 0.5);
+    --secondary: rgb(160, 136, 96);
+    --dark: rgba(50, 50, 50, 0.5);
+    --semi-dark: rgba(100, 100, 100, 0.85);
+    --light: rgba(200, 200, 200, 0.85);
+}
+
+body {
+    font-family: 'Oxanium', 'sans-serif';
+}
+
 *,
 ::before,
 ::after {
     box-sizing: border-box;
 }
 
+i {
+    font-family: "Font Awesome 6 Free";
+}
+
+:link:focus, :visited:focus { 
+    -moz-outline: none; 
+}
+
+.x-icon {
+    font-family: 'XWingMiniatures', sans-serif;
+}
+
+
 body {
-    background-image: radial-gradient(rgba(50, 50, 50, 0.5) 1px, transparent 1px);
+    background-image: radial-gradient(var(--dark) 1px, transparent 1px);
     background-size: 10px 10px;
     background-color: #141516 !important;
     color: white;
@@ -13,8 +54,7 @@ body {
 
 .header-card {
     align-items: center;
-    border: 0 solid rgba(245, 176, 66, 0.75);
-    border-width: 1px 0;
+    border: 1px solid var(--light);
     display: flex;
     height: 100%;
     justify-content: center;
@@ -28,40 +68,40 @@ body {
 .corner-border-bottom::after {
     content: "";
     position: absolute;
-    border: 0px solid #aafffc;
-    height: 5px;
-    width: 5px;
+    border: 0px solid var(--main);
+    height: 10px;
+    width: 10px;
 }
 
 .corner-border-top::before {
-    border-left-width: 1px;
-    border-top-width: 1px;
-    left: 0;
+    border-left-width: 3px;
+    border-top-width: 3px;
+    left: -1px;
     top: -1px;
 }
 .corner-border-top::after {
-    border-right-width: 1px;
-    border-top-width: 1px;
-    right: 0;
+    border-right-width: 3px;
+    border-top-width: 3px;
+    right: -1px;
     top: -1px;
 }
 
 .corner-border-bottom::before {
-    border-bottom-width: 1px;
-    border-left-width: 1px;
+    border-bottom-width: 3px;
+    border-left-width: 3px;
     bottom: -1px;
-    left: 0;
+    left: -1px;
 }
 .corner-border-bottom::after {
-    border-bottom-width: 1px;
-    border-right-width: 1px;
+    border-bottom-width: 3px;
+    border-right-width: 3px;
     bottom: -1px;
-    right: 0;
+    right: -1px;
 }
 
 .holo {
     background: linear-gradient(0deg,
-            rgba(80, 118, 175, 0.15) 0%,
+            var(--primary) 0%,
             rgba(17, 17, 17, 0) 100%);
     transition: all .4s ease-in-out;
 }

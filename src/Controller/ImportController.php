@@ -63,7 +63,6 @@ class ImportController extends AbstractController
         $factionDir = ['galactic-empire', 'rebel-alliance', 'scum-and-villainy'];
 
         $finder = new Finder();
-        $finder->files()->name('*.json')->in($directory);
 
         foreach ($factionDir as $faction) {
             $factionPath = $directory . '/' . $faction;
@@ -71,10 +70,11 @@ class ImportController extends AbstractController
             if (is_dir($factionPath)) {
 
                 $finder->files()->in($factionPath)->name('*.json');
-                foreach ($finder as $file) {
 
+                foreach ($finder as $file) {
                     $jsonContent = file_get_contents($file->getRealPath());
                     $data = json_decode($jsonContent, true);
+
 
                     if ($data) {
                         $this->importService->importShipsAndPilots($data);
