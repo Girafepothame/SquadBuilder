@@ -15,7 +15,7 @@
 
 :root {
     --main: rgba(245, 176, 66, 0.75);
-    --primary: rgba(21, 52, 79, 0.5);
+    --primary: rgba(21, 52, 79, 0.35);
     --secondary: rgb(160, 136, 96);
     --dark: rgba(50, 50, 50, 0.5);
     --semi-dark: rgba(100, 100, 100, 0.85);
@@ -48,7 +48,7 @@ i {
 body {
     background-image: radial-gradient(var(--dark) 1px, transparent 1px);
     background-size: 10px 10px;
-    background-color: #141516 !important;
+    background-color: rgba(10, 10, 10, 1) !important;
     color: white;
 }
 

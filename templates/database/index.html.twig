@@ -22,18 +22,17 @@
         <button class="bg-transparent position-absolute p-2 m-2" style="color: rgba(245, 176, 66, 0.75); border: 1px solid rgba(245, 176, 66, 0.75); border-radius: 0.25em;" onclick="window.history.back();">Retour</button>
         <span class="corner-border-top"></span>
         <div class="h-100 d-flex flex-column justify-content-between">
-            <div class="w-100 px-3 overflow-auto" style="scrollbar-width: none; -ms-overflow-style: none;">
+            <div class="">
                 <h1 class="text-center p-3">FACTIONS</h1>
-                <a class="text-decoration-none text-light h5 my-4 d-flex"
-                    data-bs-toggle="collapse"
-                    href="#search"
-                    role="button">
+                <a class="text-decoration-none text-light h5 my-4 d-flex" data-bs-toggle="collapse" href="#search" role="button">
                     <i class="fa-solid fa-caret-down mx-3"></i>
                     <span>Recherche</span>
                 </a>
                 <div class="collapse" id="search">
                     <input type="text" name="" id="">
                 </div>
+            </div>
+            <div class="w-100 px-3 overflow-auto" style="scrollbar-width: none; -ms-overflow-style: none;">
                 <div>
                     {% for faction in factions %}
                     <div>
@@ -108,10 +107,17 @@
     <!-- Contenu principal -->
     <div class="flex-grow-1 ms-3 holo header-card">
         <span class="corner-border-top"></span>
-        <div class="d-flex flex-column h-100">
-            <div>
-                <div id="name">Nom</div>
-                <div id="caption" class="fst-italic text-secondary">Caption</div>
+        <div id="shipInfo" class="w-100 d-flex flex-column h-100 d-none m-2">
+            <div class="w-100">
+                <div class="text-decoration-none d-flex text-light justify-content-between align-items-center pilots"
+                    style="background: rgb(245,176,66); background: linear-gradient(45deg, rgba(245,176,66,0.35) 5%, rgba(245,176,66, 0) 15%); color: rgba(50, 50, 50, 1); border-bottom: 1px solid rgba(245, 176, 66, 0.35);">
+                    <div class="h-100 d-flex justify-content-between align-items-center">
+                        <span id="initiative" class="ms-3 h-100 h2"></span>
+                        <span class="ms-5 h-100 h3">
+                            <span id="name"></span> - <span id="caption" class="fst-italic text-secondary"></span>
+                        </span>
+                    </div>
+                </div>
             </div>
             <img id="artwork" src="" alt="">
         </div>
@@ -152,18 +158,22 @@
             });
     });
 
-    const pilotsData = {{ pilots|json_encode|raw }}
+    let pilotsData = {{ pilots|json_encode|raw }}
     console.log(pilotsData)
 
     
     document.querySelectorAll(".pilots").forEach(pilotEl => {
         pilotEl.addEventListener("click", function () {
+            document.querySelector("#shipInfo").classList.remove("d-none")
             let pilotId = pilotEl.id;
 
             // Trouver le pilote correspondant dans les données JSON
             let selectedPilot = pilotsData.find(pilot => pilot.id == pilotId)
             
-            document.querySelector("#artwork").src = selectedPilot["image"]
+            document.querySelector("#initiative").innerText = selectedPilot["initiative"]
+            document.querySelector("#name").innerText = selectedPilot["name"]
+            document.querySelector("#caption").innerText = selectedPilot["caption"]
+            document.querySelector("#artwork").src = selectedPilot["artwork"]
         });
     });
 
