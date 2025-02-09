@@ -148,3 +148,54 @@ body {
 .w-65 {
     width: 65%;
 }
+
+.gradient-border {
+    position: relative;
+    padding: 10px;
+    border-top-left-radius: .5em;
+}
+
+.gradient-border::before,
+.gradient-border::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 1px;
+}
+
+.pilots {
+    position: relative;
+    background: linear-gradient(45deg, rgba(245,176,66,0.35) 5%, rgba(245,176,66, 0) 15%);
+    overflow: hidden;
+}
+
+.pilots::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, rgba(245,176,66,0.35) 5%, rgba(245,176,66, 0) 50%);
+    transform: translateX(-100%);
+    transition: transform 0.25s cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+
+.pilots:hover::before {
+    transform: translateX(0);
+}
+
+
+
+
+.gradient-border::before {
+    top: 0;
+    background: linear-gradient(to left, rgba(245,176,66,0.35), transparent);
+}
+
+.gradient-border::after {
+    bottom: 0;
+    background: linear-gradient(to right, rgba(245,176,66,0.35), transparent);
+}
+
