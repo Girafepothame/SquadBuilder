@@ -16,6 +16,27 @@ class ActionRepository extends ServiceEntityRepository
         parent::__construct($registry, Action::class);
     }
 
+    public function findAllAsArray(): array
+    {
+        return array_map(function (Action $action) {
+            return [
+                'id' => $action->getId(),
+                'difficulty' => $action->getDifficulty(),
+                'type' => $action->getType(),
+                'ship' => $action->getShip() ? [
+                    'id' => $action->getShip()->getId(),
+                    'name' => $action->getShip()->getName(),
+                ] : null,
+                'linkedAction' => $action->getLinkedAction() ? [
+                    'id' => $action->getLinkedAction()->getId(),
+                    'type' => $action->getLinkedAction()->getType(),
+                    'difficulty' => $action->getLinkedAction()->getDifficulty(),
+                ] : null,
+            ];
+        }, $this->findAll());
+    }
+
+
     //    /**
     //     * @return Action[] Returns an array of Action objects
     //     */

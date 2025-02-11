@@ -102,40 +102,57 @@ class ImportService
     public function importStats(array $stats, Ship $ship): void
     {
         foreach ($stats as $statData) {
-            $stat = new Stat();
-            $stat->setArc($statData['arc'] ?? null);
-            $stat->setType($statData['type']);
-            $stat->setValue($statData['value']);
-            $stat->setRecovers($statData['recovers'] ?? null);
-            $stat->setShip($ship);
 
+            $existingStat = $this->entityManager->getRepository(Stat::class)->findOneBy([
+                'type' => $statData['type'],
+                'value' => $statData['value'],
+                'ship' => $ship
+            ]);
 
-            $this->entityManager->persist($stat);
+            if (!$existingStat) {
+                $stat = new Stat();
+                $stat->setArc($statData['arc'] ?? null);
+                $stat->setType($statData['type']);
+                $stat->setValue($statData['value']);
+                $stat->setRecovers($statData['recovers'] ?? null);
+                $stat->setShip($ship);
+    
+    
+                $this->entityManager->persist($stat);
+            }
         }
     }
 
     public function importActions(array $actions, Ship $ship): void
     {
         foreach ($actions as $actionData) {
-            
-            $action = new Action();
-            $action->setDifficulty($actionData['difficulty']);
-            $action->setType($actionData['type']);
-            $action->setShip($ship);
 
-            if (isset($actionData['linked'])) {
-                
-                $linkedAction = new Action();
-                $linkedAction->setDifficulty($actionData['linked']['difficulty']);
-                $linkedAction->setType($actionData['linked']['type']);
-                $linkedAction->setShip($ship);
-                
-                $this->entityManager->persist($linkedAction);
-                
-                $action->setLinkedAction($linkedAction);
+            $existingAction = $this->entityManager->getRepository(Action::class)->findOneBy([
+                'type' => $actionData['type'],
+                'difficulty' => $actionData['difficulty'],
+                'ship' => $ship
+            ]);
+
+            if (!$existingAction || isset($actionData["linked"])) {
+                $action = new Action();
+                $action->setDifficulty($actionData['difficulty']);
+                $action->setType($actionData['type']);
+                $action->setShip($ship);
+    
+                if (isset($actionData['linked'])) {
+                    
+                    $linkedAction = new Action();
+                    $linkedAction->setDifficulty($actionData['linked']['difficulty']);
+                    $linkedAction->setType($actionData['linked']['type']);
+                    $linkedAction->setShip($ship);
+                    
+                    $this->entityManager->persist($linkedAction);
+                    
+                    $action->setLinkedAction($linkedAction);
+                }
+    
+                $this->entityManager->persist($action);
             }
-
-            $this->entityManager->persist($action);
         }
     }
 

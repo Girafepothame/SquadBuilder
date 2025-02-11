@@ -10,24 +10,29 @@ use Symfony\Component\Routing\Attribute\Route;
 use App\Repository\FactionRepository;
 use App\Repository\ShipRepository;
 use App\Repository\PilotRepository;
-
-use App\Entity\Pilot;
+use App\Repository\ActionRepository;
+use App\Repository\StatRepository;
 
 class Controller extends AbstractController
 {
     private $factionRepository;
     private $shipRepository;
     private $pilotRepository;
+    private $actionRepository;
+    private $statRepository;
 
     // Injection des dépendances via le constructeur
-    public function __construct(FactionRepository $factionRepository, ShipRepository $shipRepository, PilotRepository $pilotRepository)
+    public function __construct(FactionRepository $factionRepository, ShipRepository $shipRepository,
+        PilotRepository $pilotRepository, ActionRepository $actionRepository, StatRepository $statRepository)
     {
         $this->factionRepository = $factionRepository;
         $this->shipRepository = $shipRepository;
         $this->pilotRepository = $pilotRepository;
+        $this->actionRepository = $actionRepository;
+        $this->statRepository = $statRepository;
     }
 
-    #[Route('/', name: 'app_')]
+    #[Route('/', name: 'app_home')]
     public function index(): Response
     {
         return $this->render('/index.html.twig', [
@@ -38,31 +43,29 @@ class Controller extends AbstractController
     #[Route("/database", name: "database")]
     public function database(SessionInterface $session)
     {
-        // Vérifier si les données sont déjà en session
         if (!$session->has('factions')) {
-            // Si les données ne sont pas en session, les charger depuis la base de données
-            $factions = $this->factionRepository->findAll();
-            $ships = $this->shipRepository->findAll();
-            $pilots = $this->pilotRepository->findAll();
 
             $factionsArray = $this->factionRepository->findAllAsArray();
             $shipsArray = $this->shipRepository->findAllAsArray();
             $pilotsArray = $this->pilotRepository->findAllAsArray();
+            $actionsArray = $this->actionRepository->findAllAsArray();
+            $statsArray = $this->statRepository->findAllAsArray();
 
             // var_dump($factions, $ships, $pilots);
             // die();
 
-            // Stocker les données dans la session
             $session->set('factions', $factionsArray);
             $session->set('ships', $shipsArray);
             $session->set('pilots', $pilotsArray);
+            $session->set('actions', $actionsArray);
+            $session->set('stats', $statsArray);
 
         } else {
-            // Récupérer les données depuis la session
             $factionsArray = $session->get('factions');
             $shipsArray = $session->get('ships');
             $pilotsArray = $session->get('pilots');
-            
+            $actionsArray = $session->get('actions');
+            $statsArray = $session->get('stats');
             
             // var_dump($factions, $ships, $pilots);
             // die();
@@ -78,7 +81,9 @@ class Controller extends AbstractController
         return $this->render('database/index.html.twig', [
             'factions' => $factionsArray,
             'ships' => $shipsArray,
-            'pilots' => $pilotsArray
+            'pilots' => $pilotsArray,
+            'actions' => $actionsArray,
+            'stats' => $statsArray
         ]);
     }
 }

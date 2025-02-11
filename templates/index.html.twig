@@ -7,25 +7,21 @@
 
 </style>
 
-<div>
-    <div class="m-auto d-flex justify-content-between mt-5 w-65">
-        <a class="col-4 btn-squad text-decoration-none">
-            <div class="header-card holo">
-                <span class="corner-border-top"></span>
-                <div>
-                    <h1 class="headline1"> SQUAD BUILDER </h1>
-                </div>
-                <span class="corner-border-bottom"></span>
-            </div>
+<div class="container-fluid p-0 h-100">
+    <div class="d-flex h-100 m-3 justify-content-between align-items-center">
+        <!-- Squad Builder -->
+        <a href="#" class="hover-link position-relative flex-grow-1 d-flex w-50 h-100 overflow-hidden text-decoration-none">
+            <img src="/assets/artworks/SB-art.jpg" class="im-link artwork w-100 h-100" alt="Squad Builder">
+            <h1 class="position-absolute top-50 start-50 translate-middle text-decoration-underline text-neon">SQUAD BUILDER</h1>
         </a>
-        <a href="{{ path('app_database') }}" class="col-4 btn-squad text-decoration-none">
-            <div class="header-card holo">
-                <span class="corner-border-top"></span>
-                <div>
-                    <h1 class="headline1"> DATABASE </h1>
-                </div>
-                <span class="corner-border-bottom"></span>
-            </div>
+
+        <!-- Séparateur vertical -->
+        <div class="vertical-separator mx-3"></div>
+
+        <!-- Database -->
+        <a href="{{ path('app_database') }}" class="hover-link position-relative flex-grow-1 d-flex w-50 h-100 overflow-hidden text-decoration-none">
+            <img src="/assets/artworks/DB-art.jpg" class="im-link artwork w-100 h-100" alt="Database">
+            <h1 class="position-absolute top-50 start-50 translate-middle text-decoration-underline text-neon">DATABASE</h1>
         </a>
     </div>
 </div>

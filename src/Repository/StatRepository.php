@@ -16,6 +16,24 @@ class StatRepository extends ServiceEntityRepository
         parent::__construct($registry, Stat::class);
     }
 
+    public function findAllAsArray(): array
+    {
+        return array_map(function (Stat $stat) {
+            return [
+                'id' => $stat->getId(),
+                'arc' => $stat->getArc(),
+                'type' => $stat->getType(),
+                'value' => $stat->getValue(),
+                'recovers' => $stat->getRecovers(),
+                'ship' => $stat->getShip() ? [
+                    'id' => $stat->getShip()->getId(),
+                    'name' => $stat->getShip()->getName(),
+                ] : null,
+            ];
+        }, $this->findAll());
+    }
+
+
     //    /**
     //     * @return Stat[] Returns an array of Stat objects
     //     */

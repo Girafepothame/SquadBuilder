@@ -19,17 +19,17 @@
 <div class="d-flex flex-grow-1 m-3 overflow-hidden">
     <!-- Sidebar -->
     <nav class="h-100 col-md-5 col-lg-4 d-md-block holo header-card holo">
-        <button class="bg-transparent position-absolute p-2 m-2" style="color: rgba(245, 176, 66, 0.75); border: 1px solid rgba(245, 176, 66, 0.75); border-radius: 0.25em;" onclick="window.location.href='{{ path('app_') }}';">Retour</button>
+        <a class="bg-transparent position-absolute p-2 m-2" style="color: rgba(245, 176, 66, 0.75); border: 1px solid rgba(245, 176, 66, 0.75); border-radius: 0.25em;" href="/">Retour</a>
         <span class="corner-border-top"></span>
         <div class="h-100 d-flex flex-column justify-content-between">
-            <div class="">
+            <div class="border-bottom">
                 <h1 class="text-center p-3">FACTIONS</h1>
                 <a class="text-decoration-none text-light h5 my-4 d-flex" data-bs-toggle="collapse" href="#search" role="button">
                     <i class="fa-solid fa-caret-down mx-3"></i>
                     <span>Recherche</span>
                 </a>
                 <div class="collapse" id="search">
-                    <input type="text" name="" id="">
+                    <input class="w-100 mb-3 rounded-pill border-0" type="text" name="" id="">
                 </div>
             </div>
             <div class="w-100 px-3 overflow-auto" style="scrollbar-width: none; -ms-overflow-style: none;">
@@ -110,7 +110,7 @@
     <div class="flex-grow-1 ms-3 holo header-card">
         <span class="corner-border-top"></span>
         <div id="shipInfo" class="w-100 d-flex flex-column h-100 d-none">
-            <div class="text-decoration-none d-flex text-light justify-content-between align-items-center m-3 gradient-border"
+            <div class="text-decoration-none d-flex text-light justify-content-between align-items-center mx-3 mt-3 gradient-border"
                 style="background: rgb(245,176,66); background: linear-gradient(45deg, rgba(245,176,66,0.35) 5%, rgba(245,176,66, 0) 15%); color: rgba(50, 50, 50, 1);">
                 <span id="initiative" class="ms-3 h1 my-0"></span>
                 <span class="ms-5 h-100">
@@ -123,27 +123,41 @@
                     <img id="shipIcon" class="ms-5 me-3" style="width: 20%;">
                 </span>
             </div>
-            <div class="m-3 d-flex">
+            <div class="mx-3 mt-3 d-flex">
                 <div class="w-65 me-3 header-card">
                     <span class="corner-border-top"></span>
-                    <img id="artwork" class="w-100 object-fit-fill" src="" alt="" loading="lazy">
+                    <img id="artwork" class="artwork w-100 object-fit-fill" src="" alt="" loading="lazy">
                     <span class="corner-border-bottom"></span>
                 </div>
-                <div class="statsCont header-card w-50 ms-3 holo">
+                <div class="statsCont header-card w-50 holo">
                     <span class="corner-border-top"></span>
                     <div id="text" class="h-100 mx-5 py-3 text-center h4 d-flex flex-column justify-content-center"></div>
                     <span class="corner-border-bottom"></span>
                 </div>
             </div>
 
-            <div class="header-card m-3 holo">
+            <div class="header-card mx-3 mt-3 holo h-100">
                 <span class="corner-border-top"></span>
-                <div>
-                    <div class="d-flex justify-content-between w-100">
-                        <div class="m-3 maneuver-table header-card">
-                            <span class="corner-border-top"></span>
-                            <div class="grid-container" id="maneuver-grid"></div>
-                            <span class="corner-border-bottom"></span>
+                <div class="w-100 d-flex justify-content-between">
+                    <div id="stats" class="d-flex justify-content-between ms-3 w-50">
+                        
+                    </div>
+                    <div class="vr"></div>
+                    <div id="slots" class="d-flex me-3">
+
+                    </div>
+                </div>
+                <span class="corner-border-bottom"></span>
+            </div>
+
+            <div class="header-card m-3 holo h-100">
+                <span class="corner-border-top"></span>
+                <div class="d-flex justify-content-between m-3 w-100">
+                    <div class="d-flex h-100 border-end">
+                        <div class="m-3 maneuver-table">
+                            {# <span class="corner-border-top"></span> #}
+                            <div class="grid-container my-3 me-3" id="maneuver-grid"></div>
+                            {# <span class="corner-border-bottom"></span> #}
                         </div>
                         <div class="d-flex flex-column">
                             
@@ -211,10 +225,14 @@ var iconMap = {
     "Left Arc" : "£",
     "Right Arc" : "¢",
     "Single Turret Arc" : "p",
+    "Double Turret Arc" : "q",
+    "Shields" : "*",
+    "Hull" : "&",
+    "Agility" : "^",
+    "Energy" : "(",
 
     "Hit" : "d",
     "Critical Hit" : "c",
-    "Shield" : "*",
 
     "Charge" : "g",
     "Calculate" : "a",
@@ -236,6 +254,17 @@ var iconMap = {
     "Straight" : "8",
     "Bank Right": "9",
 
+    "Astromech" : "A",
+    "Cargo" : "G",
+    "Hardpoint" : "H",
+    "Modification" : "m",
+    "Sensor" : "S",
+    "Team" : "T",
+    "Tech" : "X",
+    "Title" : "t",
+    "Crew" : "W",
+    "Device" : "B",
+    "Gunner" : "Y",
     "Configuration" : "n",
     "Turret" : "U",
     "Missile" : "M",
@@ -243,24 +272,15 @@ var iconMap = {
     "Talent" : "E",
     "Cannon" : "C",
     "Illicit" : "I",
-}
-var maneuverMap = {
-    "L" : "1",
-    "K" : "2",
-    "P" : "3",
-    "T" : "4",
-    "O" : "5",
-    "Y" : "6",
-    "B" : "7",
-    "F" : "8",
-    "N" : "9",
-    "A" : "J",
-    "D" : "L",
+    "Force Power" : "F"
 }
 
 var pilotsData = {{ pilots|json_encode|raw }}
 var shipsData = {{ ships|json_encode|raw }}
-// console.log(pilotsData)
+var actionsData = {{ actions|json_encode|raw }}
+var statsData = {{ stats|json_encode|raw }}
+
+{# console.log(actionsData) #}
 
 document.querySelectorAll(".pilots").forEach(pilotEl => {
     pilotEl.addEventListener("click", function () {
@@ -277,7 +297,11 @@ document.querySelectorAll(".pilots").forEach(pilotEl => {
         let maneuvers = parseManeuvers(pilotShip["maneuvers"]);
         renderManeuverGrid(maneuvers)
 
-        {# console.log(maneuvers) #}
+        let stats = statsData.filter(s => s.ship && s.ship.id == pilotShip.id);
+        let actions = actionsData.filter(a => a.ship && a.ship.id == pilotShip.id);
+        
+        console.log(stats)
+        console.log(actions)
         
         let limited = ""
         if (selectedPilot["limited"] > 0) {
@@ -288,7 +312,8 @@ document.querySelectorAll(".pilots").forEach(pilotEl => {
             limited += "</span>"
         }
 
-        {# console.log(pilotShip) #}
+        {# console.log(selectedPilot)
+        console.log(pilotShip) #}
         
         document.querySelector("#initiative").innerText = selectedPilot["initiative"]
         document.querySelector("#name").innerHTML = limited + " " + selectedPilot["name"]
@@ -296,8 +321,66 @@ document.querySelectorAll(".pilots").forEach(pilotEl => {
         document.querySelector("#cost").innerText = selectedPilot["cost"] + " pts"
         document.querySelector("#shipIcon").src = pilotShip["icon"]
         document.querySelector("#artwork").src = selectedPilot["artwork"]
-        document.querySelector("#text").innerHTML = selectedPilot["ability"] != null ? "<div>" + replaceBracketsWithIcons(selectedPilot["ability"]) + "</div>" : "<div class='fst-italic'>" + selectedPilot["text"] + "</div>"
+        document.querySelector("#text").innerHTML = selectedPilot["ability"] != null ? "<div>" + replaceBracketsWithIcons(selectedPilot["ability"]) + "</div>" : "<div class='fst-italic text-secondary'>" + selectedPilot["text"] + "</div>"
         document.querySelector("#text").innerHTML += selectedPilot["shipAbility"] ? "<div> <hr>" + replaceBracketsWithIcons(selectedPilot["shipAbility"]) + "</div>" : ""
+
+        const slotsContainer = document.getElementById("slots");
+        slotsContainer.innerHTML = "";
+
+        selectedPilot.slots.split(",").forEach(slot => {
+            const slotElement = document.createElement("span");
+            slotElement.classList.add("slot-badge", "x-icon", "text-secondary", "ms-2"); // Ajoute une classe si besoin pour le style
+            slotElement.textContent = iconMap[slot.trim()]; // Supprime les espaces éventuels
+            slotsContainer.appendChild(slotElement);
+        });
+
+        
+        const statsContainer = document.getElementById("stats");
+        statsContainer.innerHTML = ""; // Vide le container avant d'ajouter les nouvelles stats
+
+        stats.forEach(stat => {
+            const statElement = document.createElement("span");
+            statElement.classList.add("stat-badge", "ms-2"); // Ne met plus x-icon ici
+
+            // Fonction pour mettre la première lettre en majuscule
+            const capitalizeFirstLetter = str => str.charAt(0).toUpperCase() + str.slice(1);
+
+            // Normalisation des clés
+            const statType = capitalizeFirstLetter(stat.type);
+            const statArc = stat.arc ? capitalizeFirstLetter(stat.arc) : null;
+
+            const colorClassMap = {
+                "Attack": "stat-attack",  
+                "Agility": "stat-agility",
+                "Hull": "stat-hull",
+                "Shields": "stat-shield",
+                "Energy": "stat-energy"
+            };
+
+            // Appliquer la couleur selon le type
+            statElement.classList.add(colorClassMap[statType] || "stat-default");
+
+            // Définir l'icône selon le type (arc si attack, sinon type)
+            let iconKey = statType === "Attack" ? statArc : statType;
+            let icon = iconKey && iconMap[iconKey] ? iconMap[iconKey] : "❓"; // Fallback "?"
+
+            // Création du span pour l'icône
+            const iconSpan = document.createElement("span");
+            iconSpan.classList.add("x-icon"); // Ajoute la classe x-icon uniquement ici
+            iconSpan.textContent = icon;
+
+            // Création du span pour la valeur
+            const valueSpan = document.createElement("span");
+            valueSpan.textContent = ` ${stat.value}`; // Ajoute un espace pour la lisibilité
+
+            // Ajoute les éléments au conteneur
+            statElement.appendChild(iconSpan);
+            statElement.appendChild(valueSpan);
+            statsContainer.appendChild(statElement);
+        });
+
+
+
 
     });
 });
@@ -337,13 +420,14 @@ function getIcon(type) {
         "E" : ";",
     };
 
-    return maneuverMap[type] || "?"; // Renvoie "?" si inconnu
+    return maneuverMap[type] || "?";
 }
 
 
 function renderManeuverGrid(maneuvers) {
     let gridContainer = document.getElementById("maneuver-grid");
-    gridContainer.innerHTML = ""; // Reset de la grille
+
+    gridContainer.innerHTML = "";
 
     let columnOrder = ["LRA", "T", "B", "FO", "N", "Y", "PKED"];
 
@@ -360,7 +444,6 @@ function renderManeuverGrid(maneuvers) {
             let cell = document.createElement("div");
             cell.classList.add("grid-cell", "x-icon");
 
-            // Trouver une manœuvre correspondant à cette colonne
             let maneuver = maneuvers.find(m => m.speed == speed && type.includes(m.type));
 
             if (maneuver) {
