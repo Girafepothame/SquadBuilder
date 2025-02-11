@@ -26,6 +26,7 @@ class ShipRepository extends ServiceEntityRepository
                 'size' => $ship->getSize(),
                 'icon' => $ship->getIcon(),
                 'dialCode' => $ship->getDialCode(),
+                'maneuvers' => $ship->getManeuvers(),
                 'faction' => $ship->getFaction() ? [
                     'id' => $ship->getFaction()->getId(),
                     'name' => $ship->getFaction()->getName(),
