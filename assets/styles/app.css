@@ -131,7 +131,6 @@ body {
 }
 
 .im-link {
-    object-fit: cover;
     transition: all 0.5s;
     opacity: 0.5;
 }
@@ -298,6 +297,7 @@ body {
 }
 
 .artwork {
+    object-fit: cover;
     -webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0));
     mask-image: linear-gradient(to bottom, rgba(0,0,0,1), rgba(0,0,0,0));
 }

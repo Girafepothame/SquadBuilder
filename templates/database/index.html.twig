@@ -126,7 +126,7 @@
             <div class="mx-3 mt-3 d-flex">
                 <div class="w-65 me-3 header-card">
                     <span class="corner-border-top"></span>
-                    <img id="artwork" class="artwork w-100 object-fit-fill" src="" alt="" loading="lazy">
+                    <img id="artwork" class="artwork w-100 h-100 object-fit-fill" src="" alt="" loading="lazy">
                     <span class="corner-border-bottom"></span>
                 </div>
                 <div class="statsCont header-card w-50 holo">
@@ -311,9 +311,6 @@ document.querySelectorAll(".pilots").forEach(pilotEl => {
             }
             limited += "</span>"
         }
-
-        {# console.log(selectedPilot)
-        console.log(pilotShip) #}
         
         document.querySelector("#initiative").innerText = selectedPilot["initiative"]
         document.querySelector("#name").innerHTML = limited + " " + selectedPilot["name"]
