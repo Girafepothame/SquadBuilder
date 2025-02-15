@@ -14,8 +14,8 @@
 }
 
 @font-face {
-    font-family: 'Distant';
-    src: url('/assets/fonts/SF Distant Galaxy.ttf') format('truetype');
+    font-family: 'spacebar';
+    src: url('/assets/fonts/SPACEBAR.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
 }
@@ -44,6 +44,11 @@ i {
     font-family: "Font Awesome 6 Free";
 }
 
+.headline {
+    font-size: 2vw;
+    letter-spacing: .2rem;
+    font-family: 'spacebar';
+}
 
 :link:focus, :visited:focus { 
     -moz-outline: none; 
@@ -135,14 +140,39 @@ body {
     opacity: 0.5;
 }
 
+@keyframes glowing {
+    0% {
+        box-shadow: 0 0 5px var(--light);
+        background-color: var(--light);
+    }
+    25% {
+        box-shadow: 0 0 10px var(--blue);
+        background-color: var(--blue);
+    }
+    50% {
+        box-shadow: 0 0 15px red;
+        background-color: red;
+    }
+    75% {
+        box-shadow: 0 0 10px var(--main);
+        background-color: var(--main);
+    }
+    100% {
+        box-shadow: 0 0 5px var(--light);
+        background-color: var(--light);
+    }
+}
+
 .vertical-separator {
     width: 4px;
-    box-shadow: 0 0 5px white;
-    background-color: var(--light);
     height: 95%;
-    position: relative;
     border-radius: 50px;
+    position: relative;
+    
+    /* Animation */
+    animation: glowing 10s infinite alternate ease-in-out;
 }
+
 
 .hover-link:hover .im-link {
     transform: scale(1.05);
@@ -307,27 +337,30 @@ body {
 .grid-container {
     display: flex;
     flex-direction: column;
+    justify-content: center;
     gap: 5px;
     align-items: flex-start;
 }
 
 .grid-row {
     display: flex;
+    justify-content: space-between;
     gap: 5px;
     align-items: center;
 }
 
 .speed-label {
     width: 30px;
+    font-size: 1vw;
     text-align: right;
     font-weight: bold;
     margin-right: 10px;
 }
 
 .grid-cell {
-    width: 25px;
-    height: 25px;
-    font-size: 1.25em;
+    height: 2vw;
+    width: 2vw;
+    font-size: 1.5vw;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -368,4 +401,199 @@ body {
 
 .stat-badge, .slot-badge {
     font-size: 2.5em;
+    user-select: none;
+    transition: color 0.1s;
 }
+.slot-badge:hover {
+    color: white !important;
+}
+
+
+/* AUTH */
+
+/* Animation d'apparition */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+#login-form, #register-form {
+    animation: fadeInUp 0.5s ease-in-out;
+}
+
+input {
+    height: 35px;
+}
+
+input:focus {
+    outline: none;
+    border-color: var(--main);
+}
+
+.tab-buttons {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    display: flex;
+}
+
+.btn-tab {
+    position: relative;
+    width: 50%;
+    padding: 12px;
+    border: 1px solid var(--main);
+    background: rgba(0, 0, 0, 0.0);
+    color: var(--main);
+    text-transform: uppercase;
+    font-weight: bold;
+    letter-spacing: 1px;
+    cursor: pointer;
+    overflow: hidden;
+    transition: color 0.3s, box-shadow 0.3s;
+}
+
+.btn-tab::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 200%;
+    height: 100%;
+    background: var(--main);
+    transform: translateX(-50%) scaleX(0);
+    transform-origin: center;
+    transition: transform 0.4s ease-in-out;
+    z-index: -1;
+}
+
+.btn-tab.active, .btn-tab:hover {
+    color: black;
+}
+
+.btn-tab.active::before, .btn-tab:hover::before {
+    transform: translateX(-50%) scaleX(1);
+}
+
+
+.btn-submit {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    border: 1px solid var(--main);
+    background: transparent;
+    color: var(--main);
+    font-size: 1.1em;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-submit::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 300%;
+    height: 300%;
+    background: radial-gradient(circle, var(--glow) 10%, transparent 50%);
+    transition: all 0.3s ease-out;
+    transform: translate(-50%, -50%) scale(0);
+}
+
+.btn-submit:hover::before {
+    transform: translate(-50%, -50%) scale(1);
+}
+
+.btn-submit:hover {
+    color: black;
+    background: var(--main);
+    box-shadow: 0 0 15px var(--glow);
+}
+
+
+
+/* ALERTS */
+
+@keyframes slideInLeft {
+    from {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+
+@keyframes slideOutLeft {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(-100%);
+        opacity: 0;
+    }
+}
+
+
+.alert {
+    animation: slideInLeft 0.5s ease-out;
+    transition: transform 0.5s ease-out, opacity 0.5s ease-out;
+}
+
+
+.alert.hide {
+    animation: slideOutLeft 0.5s ease-in forwards;
+}
+
+
+.alert-danger {
+    background: linear-gradient(30deg, rgba(220, 53, 69, 0.9), rgba(220, 53, 69, 0.3)) !important; /* Dégradé rouge */
+    color: white !important;
+    border-color: rgba(220, 53, 69, 0.8) !important;
+    box-shadow: 0px 0px 15px rgba(220, 53, 69, 0.5) !important; /* Glow subtil */
+}
+
+.alert-success {
+    background: linear-gradient(30deg, rgba(40, 167, 69, 0.9), rgba(40, 167, 69, 0.3)) !important;
+    color: white !important;
+    border-color: rgba(40, 167, 69, 0.8) !important;
+    box-shadow: 0px 0px 15px rgba(40, 167, 69, 0.5) !important;
+}
+
+.alert-info {
+    background: linear-gradient(30deg, rgba(23, 162, 184, 0.9), rgba(23, 162, 184, 0.3)) !important;
+    color: white !important;
+    border-color: rgba(23, 162, 184, 0.8) !important;
+    box-shadow: 0px 0px 15px rgba(23, 162, 184, 0.5) !important;
+}
+
+.alert-warning {
+    background: linear-gradient(30deg, rgba(255, 193, 7, 0.9), rgba(255, 193, 7, 0.3)) !important;
+    color: white !important;
+    border-color: rgba(255, 193, 7, 0.8) !important;
+    box-shadow: 0px 0px 15px rgba(255, 193, 7, 0.5) !important;
+}
+
+.alert-message {
+    line-height: 1.5em;
+    font-size: 1.1em;
+}
+
+.w-20 {
+    width: 20%;
+}
+

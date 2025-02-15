@@ -20,7 +20,7 @@
     </head>
     <body class="d-flex flex-column vh-100">
 
-        <header style="box-shadow: 0 2px 5px black;">
+        <header class="pb-3" style="box-shadow: 0 2px 5px black;">
             <div class="mx-3 mt-4">
                 <div class="col-12 d-flex align-items-center">
                     <a class="icon-link ms-3" href="/">
@@ -28,11 +28,11 @@
                         <span class="icon-text">Home</span>
                     </a>
 
-                    <div class="text-center w-100 text-decoration-underline" style="font-size: 4em; font-family: 'Distant', sans-serif">
+                    <div class="text-center w-100 text-decoration-underline headline">
                         Binary Deployment Squadron Manager
                     </div>
 
-                    <a class="icon-link me-3" href="">
+                    <a class="icon-link me-3" href="{% if app.user %}{{ path('app_profile') }}{% else %}{{ path('app_auth') }}{% endif %}">
                         <img src="/assets/icons/profile/miniature.png" alt="Profile">
                         <span class="icon-text">Profile</span>
                     </a>
@@ -41,6 +41,7 @@
         </header>
 
         <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        <script src="{{ asset('assets/js/alerts.js') }}"></script>
 
         {% block body %}{% endblock %}
     </body>

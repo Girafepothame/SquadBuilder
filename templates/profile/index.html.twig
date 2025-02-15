@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mon Profil{% endblock %}
+
+{% block body %}
+    <h1>Bienvenue, {{ user.username }}</h1>
+    <p>Votre rôle : {{ user.roles|join(', ') }}</p>
+    <form action="{{ path('app_logout') }}" method="POST">
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('logout') }}">
+        <button type="submit" class="btn btn-danger">Déconnexion</button>
+    </form>
+
+
+{% endblock %}

@@ -136,7 +136,7 @@
                 </div>
             </div>
 
-            <div class="header-card mx-3 mt-3 holo h-100">
+            <div class="header-card mx-3 mt-3 holo">
                 <span class="corner-border-top"></span>
                 <div class="w-100 d-flex justify-content-between">
                     <div id="stats" class="d-flex justify-content-between ms-3 w-50">
@@ -152,11 +152,11 @@
 
             <div class="header-card m-3 holo h-100">
                 <span class="corner-border-top"></span>
-                <div class="d-flex justify-content-between m-3 w-100">
-                    <div class="d-flex h-100 border-end">
-                        <div class="m-3 maneuver-table">
+                <div class="d-flex justify-content-between w-100 h-100">
+                    <div class="d-flex h-100 align-items-center">
+                        <div class="maneuver-table h-75 border-end">
                             {# <span class="corner-border-top"></span> #}
-                            <div class="grid-container my-3 me-3" id="maneuver-grid"></div>
+                            <div class="grid-container me-3 h-100" id="maneuver-grid"></div>
                             {# <span class="corner-border-bottom"></span> #}
                         </div>
                         <div class="d-flex flex-column">
@@ -186,9 +186,7 @@ document.querySelectorAll("img").forEach(function (img) {
         img.style.visibility = "visible";
     };            
 });
-// console.log(document.getElementById('importDataBtn'))
-// console.log("URL factions:", "{{ path('app_import_factions') }}");
-// console.log("URL factions:", "{{ path('app_import_pilots') }}");
+
 
 document.getElementById('importDataBtn').addEventListener('click', function () {
 
@@ -196,7 +194,7 @@ document.getElementById('importDataBtn').addEventListener('click', function () {
 
     axios.get("{{ path('app_import_factions') }}")
         .then(response => {
-            console.log('Factions importées :', response.data);
+            console.log('Factions importées :', response.data.message);
         })
         .catch(error => {
             console.error('Erreur import factions:', error);
@@ -207,253 +205,190 @@ document.getElementById('importDataBtn').addEventListener('click', function () {
             axios.get("{{ path('app_import_pilots') }}")
                 .then(response => {
                     console.log('Pilotes importés :', response.data.message);
-                    document.getElementById('responseMessage').innerHTML += '<br>Pilotes: ' + response.data.message;
+                    if (!window.pilotsData) window.pilotsData = {{ pilots|json_encode|raw }};
+                    if (!window.shipsData) window.shipsData = {{ ships|json_encode|raw }};
+                    if (!window.actionsData) window.actionsData = {{ actions|json_encode|raw }};
+                    if (!window.statsData) window.statsData = {{ stats|json_encode|raw }};
                 })
                 .catch(error => {
                     console.error('Erreur import pilotes:', error);
-                    document.getElementById('responseMessage').innerHTML += '<br>Erreur lors de l\'importation des pilotes.';
                 });
+
+                
         });
+    
 });
 
-var iconMap = {
-    "Front Arc" : "{",
-    "Full Front Arc" : "~",
-    "Rear Arc" : "|",
-    "Full Rear Arc" : "¡",
-    "Bullseye Arc" : "}",
-    "Left Arc" : "£",
-    "Right Arc" : "¢",
-    "Single Turret Arc" : "p",
-    "Double Turret Arc" : "q",
-    "Shields" : "*",
-    "Hull" : "&",
-    "Agility" : "^",
-    "Energy" : "(",
+window.iconMap = window.iconMap || {
+    "Front Arc": "{", "Full Front Arc": "~", "Rear Arc": "|", "Full Rear Arc": "¡", "Bullseye Arc": "}",
+    "Left Arc": "£", "Right Arc": "¢", "Single Turret Arc": "p", "Double Turret Arc": "q",
+    "Shields": "*", "Hull": "&", "Agility": "^", "Energy": "(",
+    "Hit": "d", "Critical Hit": "c", "Charge": "g", "Calculate": "a", "Focus": "f", "Evade": "e",
+    "Barrel Roll": "r", "Boost": "b", "Lock": "l", "Force": "h", "Coordinate": "o", "Reload": "=",
+    "Segnor's Loop Left": "1", "Segnor's Loop right": "3", "Turn Left": "4", "Stationary": "5", "Turn Right": "6",
+    "Bank Left": "7", "Straight": "8", "Bank Right": "9",
+    "Astromech": "A", "Cargo": "G", "Hardpoint": "H", "Modification": "m", "Sensor": "S", "Team": "T",
+    "Tech": "X", "Title": "t", "Crew": "W", "Device": "B", "Gunner": "Y", "Configuration": "n", "Turret": "U",
+    "Missile": "M", "Torpedo": "P", "Talent": "E", "Cannon": "C", "Illicit": "I", "Force Power": "F", "Command" : "V"
+};
 
-    "Hit" : "d",
-    "Critical Hit" : "c",
+window.maneuverMap = window.maneuverMap || {
+    "L": "1", "K": "2", "P": "3", "T": "4", "O": "5", "Y": "6", "B": "7", "F": "8", "N": "9",
+    "A": "J", "D": "L", "R": ":", "E": ";"
+};
 
-    "Charge" : "g",
-    "Calculate" : "a",
-    "Focus" : "f",
-    "Evade" : "e",
-    "Barrel Roll" : "r",
-    "Boost" : "b",
-    "Lock" : "l",
-    "Force" : "h",
-    "Coordinate" : "o",
-    "Reload" : "=",
-
-    "Segnor's Loop Left": "1",
-    "Segnor's Loop right": "3",
-    "Turn Left": "4",
-    "Stationary" : "5",
-    "Turn Right": "6",
-    "Bank Left": "7",
-    "Straight" : "8",
-    "Bank Right": "9",
-
-    "Astromech" : "A",
-    "Cargo" : "G",
-    "Hardpoint" : "H",
-    "Modification" : "m",
-    "Sensor" : "S",
-    "Team" : "T",
-    "Tech" : "X",
-    "Title" : "t",
-    "Crew" : "W",
-    "Device" : "B",
-    "Gunner" : "Y",
-    "Configuration" : "n",
-    "Turret" : "U",
-    "Missile" : "M",
-    "Torpedo" : "P",
-    "Talent" : "E",
-    "Cannon" : "C",
-    "Illicit" : "I",
-    "Force Power" : "F"
-}
-
-var pilotsData = {{ pilots|json_encode|raw }}
-var shipsData = {{ ships|json_encode|raw }}
-var actionsData = {{ actions|json_encode|raw }}
-var statsData = {{ stats|json_encode|raw }}
-
-{# console.log(actionsData) #}
-
-document.querySelectorAll(".pilots").forEach(pilotEl => {
-    pilotEl.addEventListener("click", function () {
-        document.querySelectorAll(".pilots").forEach(p => {
-            p.classList.remove("selected")
-        })
-        pilotEl.classList.add("selected")
-        document.querySelector("#shipInfo").classList.remove("d-none")
-        let pilotId = pilotEl.id;
-
-        let selectedPilot = pilotsData.find(pilot => pilot.id == pilotId)
-        let pilotShip = shipsData.find(ship => ship.id == selectedPilot["ship"]["id"])
-
-        let maneuvers = parseManeuvers(pilotShip["maneuvers"]);
-        renderManeuverGrid(maneuvers)
-
-        let stats = statsData.filter(s => s.ship && s.ship.id == pilotShip.id);
-        let actions = actionsData.filter(a => a.ship && a.ship.id == pilotShip.id);
-        
-        console.log(stats)
-        console.log(actions)
-        
-        let limited = ""
-        if (selectedPilot["limited"] > 0) {
-            limited = "<span class='x-icon'>"
-            for (let i=1; i <= selectedPilot["limited"]; i++) {
-                limited += "u"
-            }
-            limited += "</span>"
-        }
-        
-        document.querySelector("#initiative").innerText = selectedPilot["initiative"]
-        document.querySelector("#name").innerHTML = limited + " " + selectedPilot["name"]
-        document.querySelector("#caption").innerText = selectedPilot["caption"]
-        document.querySelector("#cost").innerText = selectedPilot["cost"] + " pts"
-        document.querySelector("#shipIcon").src = pilotShip["icon"]
-        document.querySelector("#artwork").src = selectedPilot["artwork"]
-        document.querySelector("#text").innerHTML = selectedPilot["ability"] != null ? "<div>" + replaceBracketsWithIcons(selectedPilot["ability"]) + "</div>" : "<div class='fst-italic text-secondary'>" + selectedPilot["text"] + "</div>"
-        document.querySelector("#text").innerHTML += selectedPilot["shipAbility"] ? "<div> <hr>" + replaceBracketsWithIcons(selectedPilot["shipAbility"]) + "</div>" : ""
-
-        const slotsContainer = document.getElementById("slots");
-        slotsContainer.innerHTML = "";
-
-        selectedPilot.slots.split(",").forEach(slot => {
-            const slotElement = document.createElement("span");
-            slotElement.classList.add("slot-badge", "x-icon", "text-secondary", "ms-2"); // Ajoute une classe si besoin pour le style
-            slotElement.textContent = iconMap[slot.trim()]; // Supprime les espaces éventuels
-            slotsContainer.appendChild(slotElement);
-        });
-
-        
-        const statsContainer = document.getElementById("stats");
-        statsContainer.innerHTML = ""; // Vide le container avant d'ajouter les nouvelles stats
-
-        stats.forEach(stat => {
-            const statElement = document.createElement("span");
-            statElement.classList.add("stat-badge", "ms-2"); // Ne met plus x-icon ici
-
-            // Fonction pour mettre la première lettre en majuscule
-            const capitalizeFirstLetter = str => str.charAt(0).toUpperCase() + str.slice(1);
-
-            // Normalisation des clés
-            const statType = capitalizeFirstLetter(stat.type);
-            const statArc = stat.arc ? capitalizeFirstLetter(stat.arc) : null;
-
-            const colorClassMap = {
-                "Attack": "stat-attack",  
-                "Agility": "stat-agility",
-                "Hull": "stat-hull",
-                "Shields": "stat-shield",
-                "Energy": "stat-energy"
-            };
-
-            // Appliquer la couleur selon le type
-            statElement.classList.add(colorClassMap[statType] || "stat-default");
-
-            // Définir l'icône selon le type (arc si attack, sinon type)
-            let iconKey = statType === "Attack" ? statArc : statType;
-            let icon = iconKey && iconMap[iconKey] ? iconMap[iconKey] : "❓"; // Fallback "?"
-
-            // Création du span pour l'icône
-            const iconSpan = document.createElement("span");
-            iconSpan.classList.add("x-icon"); // Ajoute la classe x-icon uniquement ici
-            iconSpan.textContent = icon;
-
-            // Création du span pour la valeur
-            const valueSpan = document.createElement("span");
-            valueSpan.textContent = ` ${stat.value}`; // Ajoute un espace pour la lisibilité
-
-            // Ajoute les éléments au conteneur
-            statElement.appendChild(iconSpan);
-            statElement.appendChild(valueSpan);
-            statsContainer.appendChild(statElement);
-        });
-
-
-
-
-    });
-});
-
-function replaceBracketsWithIcons(text) {
-    return text.replace(/\[([^\]]+)\]/g, (match, content) => {
-        if (iconMap[content]) {
-            return `<span class="x-icon">${iconMap[content]}</span>`;
-        }
-        return match;
-    });
-}
-
-
-function parseManeuvers(maneuversStr) {
-    return maneuversStr.split(',').map(maneuver => ({
-        speed: maneuver[0],
-        type: maneuver[1],
-        difficulty: maneuver[2]
-    }));
-}
+// Vérification avant assignation des données JSON
+if (!window.pilotsData) window.pilotsData = {{ pilots|json_encode|raw }};
+if (!window.shipsData) window.shipsData = {{ ships|json_encode|raw }};
+if (!window.actionsData) window.actionsData = {{ actions|json_encode|raw }};
+if (!window.statsData) window.statsData = {{ stats|json_encode|raw }};
 
 function getIcon(type) {
-    var maneuverMap = {
-        "L": "1",
-        "K": "2",
-        "P": "3",
-        "T": "4",
-        "O": "5",
-        "Y": "6",
-        "B": "7",
-        "F": "8",
-        "N": "9",
-        "A": "J",
-        "D": "L",
-        "R" : ":",
-        "E" : ";",
-    };
-
     return maneuverMap[type] || "?";
 }
 
+function replaceBracketsWithIcons(text) {
+    return text.replace(/\[([^\]]+)\]/g, (match, content) => iconMap[content] ? `<span class="x-icon">${iconMap[content]}</span>` : match);
+}
+
+function parseManeuvers(maneuversStr) {
+    if (!maneuversStr) return [];
+    return maneuversStr.split(',').map(maneuver => {
+        if (maneuver.length < 3) return null;
+        return { speed: maneuver[0], type: maneuver[1], difficulty: maneuver[2] };
+    }).filter(Boolean);
+}
+
+function renderActions(actions) {
+    const actionsContainer = document.getElementById("actions");
+    if (!actionsContainer) return;
+    actionsContainer.innerHTML = "";
+    actions.forEach(action => {
+        const actionElement = document.createElement("span");
+        actionElement.classList.add("action-badge", "x-icon", "ms-2");
+        actionElement.textContent = iconMap[action.type] || "?";
+        actionsContainer.appendChild(actionElement);
+    });
+}
+
+function renderStats(stats) {
+    const statsContainer = document.getElementById("stats");
+    if (!statsContainer) return;
+    statsContainer.innerHTML = "";
+    stats.forEach(stat => {
+        const statElement = document.createElement("span");
+        const colorMap = { "agility": "stat-agility", "hull": "stat-hull", "shields": "stat-shield", "attack": "stat-attack", "energy": "stat-energy" };
+        statElement.classList.add("stat-badge", "ms-2", colorMap[stat.type] || "text-secondary");
+
+        var icon = stat.type
+        if (icon === "attack") icon = stat.arc
+
+        icon = icon.charAt(0).toUpperCase() + icon.slice(1)
+
+        const statIcon = document.createElement("span");
+        statIcon.classList.add("x-icon");
+        statIcon.textContent = iconMap[icon] || "?";
+
+        const statValue = document.createElement("span");
+        statValue.textContent = stat.value;
+
+        statElement.appendChild(statIcon);
+        statElement.appendChild(statValue);
+        statsContainer.appendChild(statElement);
+    });
+}
 
 function renderManeuverGrid(maneuvers) {
     let gridContainer = document.getElementById("maneuver-grid");
-
+    if (!gridContainer) return;
     gridContainer.innerHTML = "";
-
     let columnOrder = ["LRA", "T", "B", "FO", "N", "Y", "PKED"];
-
     for (let speed = 5; speed >= 0; speed--) {
         let row = document.createElement("div");
-        row.classList.add("grid-row");
-
+        row.classList.add("grid-row", "h-50", "w-100");
         let speedLabel = document.createElement("span");
         speedLabel.textContent = speed;
         speedLabel.classList.add("speed-label");
         row.appendChild(speedLabel);
-
         columnOrder.forEach(type => {
             let cell = document.createElement("div");
             cell.classList.add("grid-cell", "x-icon");
-
             let maneuver = maneuvers.find(m => m.speed == speed && type.includes(m.type));
-
             if (maneuver) {
                 cell.classList.add(`difficulty-${maneuver.difficulty}`, "bordered");
                 cell.innerHTML = getIcon(maneuver.type);
             }
-
             row.appendChild(cell);
         });
-
         gridContainer.appendChild(row);
     }
 }
+
+document.querySelectorAll(".pilots").forEach(pilotEl => {
+    pilotEl.addEventListener("click", function () {
+        document.querySelectorAll(".pilots").forEach(p => p.classList.remove("selected"));
+        pilotEl.classList.add("selected");
+
+
+        let shipInfo = document.querySelector("#shipInfo");
+        if (!shipInfo) return;
+
+        shipInfo.classList.remove("d-none");
+
+        let pilotId = pilotEl.id;
+        let selectedPilot = pilotsData.find(pilot => pilot.id == pilotId);
+        if (!selectedPilot) return;
+
+        let pilotShip = shipsData.find(ship => ship.id == selectedPilot.ship.id);
+        if (!pilotShip) return;
+
+        let maneuvers = parseManeuvers(pilotShip.maneuvers);
+        renderManeuverGrid(maneuvers);
+
+        let slots = selectedPilot.slots.split(",");
+        let slotsContainer = document.getElementById("slots");
+        if (slotsContainer) {
+            slotsContainer.innerHTML = "";
+            slots.forEach(slot => {
+                let slotElement = document.createElement("span");
+                slotElement.classList.add("slot-badge", "text-secondary", "x-icon", "ms-2");
+                slotElement.textContent = iconMap[slot] || "?";
+                slotsContainer.appendChild(slotElement);
+            });
+        }
+
+        let stats = statsData.filter(s => s.ship && s.ship.id == pilotShip.id);
+        console.log(stats)
+        let actions = actionsData.filter(a => a.ship && a.ship.id == pilotShip.id);
+        renderActions(actions);
+        renderStats(stats);
+
+        let updateText = (selector, text) => {
+            let element = document.querySelector(selector);
+            if (element) element.innerText = text;
+        };
+
+        updateText("#initiative", selectedPilot.initiative);
+        updateText("#name", selectedPilot.name);
+        updateText("#caption", selectedPilot.caption);
+        updateText("#cost", `${selectedPilot.cost} pts`);
+
+        let setSrc = (selector, src) => {
+            let element = document.querySelector(selector);
+            if (element) element.src = src;
+        };
+
+        setSrc("#shipIcon", pilotShip.icon);
+        setSrc("#artwork", selectedPilot.artwork);
+
+        let textElement = document.querySelector("#text");
+        if (textElement) {
+            textElement.innerHTML = selectedPilot.ability ? `<div>${replaceBracketsWithIcons(selectedPilot.ability)}</div>` : `<div class='fst-italic text-secondary'>${selectedPilot.text}</div>`;
+        }
+    });
+});
+
+
 
 
 

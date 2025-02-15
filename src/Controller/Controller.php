@@ -86,4 +86,51 @@ class Controller extends AbstractController
             'stats' => $statsArray
         ]);
     }
+
+    #[Route("/squadBuilder", name: "squad_builder")]
+    public function squadBuilder(SessionInterface $session)
+    {
+        if (!$session->has('factions')) {
+
+            $factionsArray = $this->factionRepository->findAllAsArray();
+            $shipsArray = $this->shipRepository->findAllAsArray();
+            $pilotsArray = $this->pilotRepository->findAllAsArray();
+            $actionsArray = $this->actionRepository->findAllAsArray();
+            $statsArray = $this->statRepository->findAllAsArray();
+
+            // var_dump($factions, $ships, $pilots);
+            // die();
+
+            $session->set('factions', $factionsArray);
+            $session->set('ships', $shipsArray);
+            $session->set('pilots', $pilotsArray);
+            $session->set('actions', $actionsArray);
+            $session->set('stats', $statsArray);
+
+        } else {
+            $factionsArray = $session->get('factions');
+            $shipsArray = $session->get('ships');
+            $pilotsArray = $session->get('pilots');
+            $actionsArray = $session->get('actions');
+            $statsArray = $session->get('stats');
+            
+            // var_dump($factions, $ships, $pilots);
+            // die();
+        }
+        
+        usort($pilotsArray, function ($a, $b) {
+            return $b['initiative'] <=> $a['initiative'];
+        });
+
+
+
+        // Passer les données à Twig
+        return $this->render('squad_builder/index.html.twig', [
+            'factions' => $factionsArray,
+            'ships' => $shipsArray,
+            'pilots' => $pilotsArray,
+            'actions' => $actionsArray,
+            'stats' => $statsArray
+        ]);
+    }
 }

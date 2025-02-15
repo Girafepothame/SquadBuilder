@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container-fluid d-flex flex-column h-100">
+        <main class="h-100 flex-grow-1 header-card m-3 holo">
+            <span class="corner-border-top"></span>
+            <h1>A</h1>
+            <ul class="list-group w-100">
+            
+            </ul>
+            <span class="corner-border-bottom"></span>
+        </main>
+    </div>
+
+    <script>
+    
+    if (!window.factionsData) window.factionsData = {{ factions|json_encode|raw }};
+    if (!window.pilotsData) window.pilotsData = {{ pilots|json_encode|raw }};
+    if (!window.shipsData) window.shipsData = {{ ships|json_encode|raw }};
+    if (!window.actionsData) window.actionsData = {{ actions|json_encode|raw }};
+    if (!window.statsData) window.statsData = {{ stats|json_encode|raw }};
+
+    console.log(factionsData);
+    
+    </script>
+{% endblock %}
