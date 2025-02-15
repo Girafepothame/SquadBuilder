@@ -42,9 +42,15 @@ final class AuthController extends AbstractController
     ): Response {
         $username = $request->request->get('username');
         $password = $request->request->get('password');
+        $confirmPassword = $request->request->get('confirm_password');
     
         if (empty($username) || empty($password)) {
             $this->addFlash('danger', 'Invalid data');
+            return $this->redirectToRoute('app_auth');
+        }
+        
+        if ($password !== $confirmPassword) {
+            $this->addFlash('danger', 'Passwords do not match');
             return $this->redirectToRoute('app_auth');
         }
     
