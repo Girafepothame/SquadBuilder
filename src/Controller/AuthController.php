@@ -6,25 +6,28 @@ use App\Entity\User;
 use App\Repository\UserRepository;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
 
-use Symfony\Bundle\SecurityBundle\Security;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
 
 final class AuthController extends AbstractController
 {
+
     #[Route('/auth', name: 'app_auth')]
-    public function index(): Response
+    public function auth(Request $request): Response
     {
-        return $this->render('auth/index.html.twig', [
-            'controller_name' => 'AuthController',
-        ]);
+        $session = $request->getSession();
+        
+        if ($request->query->get('redirect') === 'squad_builder') {
+            $this->addFlash('info', 'Vous devez être connecté pour accéder au Squad Builder.');
+        }
+    
+        return $this->render('auth/index.html.twig');
     }
+    
 
 
     #[Route('/login', name: 'app_login', methods: ['GET', 'POST'])]

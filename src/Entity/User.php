@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -30,6 +32,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[ORM\Column]
     private ?string $password = null;
+
+    /**
+     * @var Collection<int, Squadron>
+     */
+    #[ORM\OneToMany(targetEntity: Squadron::class, mappedBy: 'user')]
+    private Collection $squadrons;
+
+    public function __construct()
+    {
+        $this->squadrons = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -104,5 +117,35 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+
+    /**
+     * @return Collection<int, Squadron>
+     */
+    public function getSquadrons(): Collection
+    {
+        return $this->squadrons;
+    }
+
+    public function addSquadron(Squadron $squadron): static
+    {
+        if (!$this->squadrons->contains($squadron)) {
+            $this->squadrons->add($squadron);
+            $squadron->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSquadron(Squadron $squadron): static
+    {
+        if ($this->squadrons->removeElement($squadron)) {
+            // set the owning side to null (unless already changed)
+            if ($squadron->getUser() === $this) {
+                $squadron->setUser(null);
+            }
+        }
+
+        return $this;
     }
 }
